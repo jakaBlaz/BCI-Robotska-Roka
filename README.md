@@ -1,3 +1,1 @@
-# ledinaRobotskaRoka
-
-"# BCI-Robotska-Roka" 
+# BCI-Robotska-Roka

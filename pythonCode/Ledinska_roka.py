@@ -85,5 +85,6 @@ def main():
         Deinitialize_Servo(control_PWM)
 
 print("Hello World!")
+print("Neki neki")
 
 main()

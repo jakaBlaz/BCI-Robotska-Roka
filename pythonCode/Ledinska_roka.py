@@ -86,5 +86,6 @@ def main():
 
 print("Hello World!")
 print("Neki neki")
+print("Megadeth")
 
 main()

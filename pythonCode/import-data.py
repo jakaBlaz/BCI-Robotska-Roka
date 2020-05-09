@@ -32,8 +32,3 @@ else:
     print(type(test))
      
 f.close()
-
-
-
-
-

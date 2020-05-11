@@ -1,12 +1,13 @@
 #to je glavna skripta
-import bisijao as BCI
-
-option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-nepopkolan = BCI.start(option)
-data = BCI.popcol(nepopkolan, 8)
-print(data)
+import bisijao as bci
 import numpy as np
 import matplotlib.pyplot as plt 
+
+
+option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
+nepopkolan = bci.start(option)
+data = bci.popcol(nepopkolan, 8)
+print(data)
 
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 

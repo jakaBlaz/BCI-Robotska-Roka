@@ -1,7 +1,7 @@
 #to je glavna skripta
-<<<<<<< HEAD
 import bisijao as bci
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 filepath = "D:\Personal\Programiranje\Ledinska_roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt"
@@ -10,18 +10,11 @@ while True:
     continue
 
 # Uvoz podatkov
-option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-data = bci.start(option)
-=======
-import bisijao as BCI
 
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-nepopkolan = BCI.start(option)
-data = BCI.popcol(nepopkolan, 8)
+nepopkolan = bci.start(option)
+data = bci.popcol(nepopkolan, 8)
 print(data)
->>>>>>> 35055776d253b9ae2895dd62f680f49e2a779a83
-import numpy as np
-import matplotlib.pyplot as plt 
 
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 

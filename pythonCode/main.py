@@ -42,12 +42,10 @@ plt.show()
 
 '''
 fajl = open(pot + "/OpenBCI-RAW-2020-01-21_17-12-11.txt")
-
 a = np.array()
 for line in fajl:
     a.append(line)
 a = np.array([1, 2, 3])
-
 print(a)
 '''
 

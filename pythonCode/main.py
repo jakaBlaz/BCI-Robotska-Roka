@@ -1,9 +1,29 @@
 #to je glavna skripta
 import numpy as np
+import matplotlib.pyplot as plt 
 
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 
 
+
+# x axis values 
+x = [1,2,3] 
+# corresponding y axis values 
+y = [2,4,1] 
+  
+# plotting the points  
+plt.plot(x, y) 
+  
+# naming the x axis 
+plt.xlabel('x - axis') 
+# naming the y axis 
+plt.ylabel('y - axis') 
+  
+# giving a title to my graph 
+plt.title('My first graph!') 
+  
+# function to show the plot 
+plt.show() 
 
 
 

@@ -1,4 +1,5 @@
 #to je glavna skripta
+<<<<<<< HEAD
 import bisijao as bci
 import numpy as np
 
@@ -11,6 +12,14 @@ while True:
 # Uvoz podatkov
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 data = bci.start(option)
+=======
+import bisijao as BCI
+
+option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
+nepopkolan = BCI.start(option)
+data = BCI.popcol(nepopkolan, 8)
+print(data)
+>>>>>>> 35055776d253b9ae2895dd62f680f49e2a779a83
 import numpy as np
 import matplotlib.pyplot as plt 
 

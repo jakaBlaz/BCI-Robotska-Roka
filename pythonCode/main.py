@@ -1,4 +1,5 @@
 #to je glavna skripta
+import bisijao as bci
 import numpy as np
 
 

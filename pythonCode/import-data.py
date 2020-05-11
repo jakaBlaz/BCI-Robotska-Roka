@@ -3,7 +3,6 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-readData = False #a berem podatke al ne?
 altfile = '/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/data/a-very-light-test.txt'
 '''
 a = np.loadtxt(altfile)
@@ -20,7 +19,7 @@ if option=='txt':
     root.destroy()
 
     data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
-    print(type(data))
+    print(data)
 elif option == 'stream':
     print('Starting stream...')
 else:
@@ -30,5 +29,5 @@ else:
 
     test = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
     print(type(test))
-     
+
 f.close()

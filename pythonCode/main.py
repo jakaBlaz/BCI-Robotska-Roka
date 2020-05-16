@@ -4,10 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+""" 
 filepath = "D:\Personal\Programiranje\Ledinska_roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt"
 file = open(filepath,"r")
 while True:
     continue
+ """
 
 # Uvoz podatkov
 

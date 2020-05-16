@@ -4,20 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-filepath = "D:\Personal\Programiranje\Ledinska_roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt"
-file = open(filepath,"r")
-while True:
-    continue
-
-# Uvoz podatkov
-
-option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-nepopkolan = bci.start(option)
-data = bci.popcol(nepopkolan, 8)
-print(data)
-
-#file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
-
 
 
 # x axis values 
@@ -50,7 +36,7 @@ for line in fajl:
 a = np.array([1, 2, 3])
 print(a)
 '''
-
+'''
 #parsanje in čuda
 pot = r"c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57"
 ime =  "/OpenBCI-RAW-2020-01-21_17-12-11.txt"
@@ -71,3 +57,18 @@ print(prva_vrstica)
 print(prva_vrstica.pop(8))
 print(prva_vrstica)
 print(int(lines[6].split(',')[0]))
+'''
+filepath = "D:\Personal\Programiranje\Ledinska_roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt"
+file = open(filepath,"r")
+while True:
+    continue
+
+# Uvoz podatkov
+
+option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
+nepopkolan = bci.start(option)
+data = bci.popcol(nepopkolan, 8)
+print(data)
+
+#file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
+"""

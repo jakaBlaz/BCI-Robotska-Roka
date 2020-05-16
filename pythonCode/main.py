@@ -40,7 +40,7 @@ plt.title('My first graph!')
 plt.show() 
 
 
-
+# bla
 
 '''
 fajl = open(pot + "/OpenBCI-RAW-2020-01-21_17-12-11.txt")

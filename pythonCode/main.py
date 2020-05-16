@@ -19,22 +19,25 @@ print(data)
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 
 
+arr0 = np.array([[0,1,2,3,4,5]])
+arr1 = np.array([[5.77,4.55,5.74,5.02,2.32,110.30]]) 
 
 # x axis values 
-x = [1,2,3] 
+x = (arr0)
 # corresponding y axis values 
-y = [2,4,1] 
+y = (arr1)
   
+plt.figure()
 # plotting the points  
 plt.plot(x, y) 
   
 # naming the x axis 
-plt.xlabel('x - axis') 
+plt.xlabel('x - čas') 
 # naming the y axis 
-plt.ylabel('y - axis') 
+plt.ylabel('y - podatki') 
   
 # giving a title to my graph 
-plt.title('My first graph!') 
+plt.title('Graf podatkov vlomljeno s časom!') 
   
 # function to show the plot 
 plt.show() 
@@ -50,7 +53,7 @@ for line in fajl:
 a = np.array([1, 2, 3])
 print(a)
 '''
-
+'''
 #parsanje in čuda
 pot = r"c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57"
 ime =  "/OpenBCI-RAW-2020-01-21_17-12-11.txt"
@@ -71,3 +74,4 @@ print(prva_vrstica)
 print(prva_vrstica.pop(8))
 print(prva_vrstica)
 print(int(lines[6].split(',')[0]))
+'''

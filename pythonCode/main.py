@@ -1,12 +1,13 @@
 #to je glavna skripta
 import bisijao as BCI
+import numpy as np
+import matplotlib.pyplot as plt 
 
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 nepopkolan = BCI.start(option)
 data = BCI.popcol(nepopkolan, 8)
 print(data)
-import numpy as np
-import matplotlib.pyplot as plt 
+
 
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 
@@ -32,18 +33,7 @@ plt.title('My first graph!')
 plt.show() 
 
 
-
-
-'''
-fajl = open(pot + "/OpenBCI-RAW-2020-01-21_17-12-11.txt")
-a = np.array()
-for line in fajl:
-    a.append(line)
-a = np.array([1, 2, 3])
-print(a)
-'''
-
-#parsanje in čuda
+# parsanje
 pot = r"c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57"
 ime =  "/OpenBCI-RAW-2020-01-21_17-12-11.txt"
 celapot = pot + ime

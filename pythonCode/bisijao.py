@@ -10,6 +10,7 @@ def popcol(my_array,pc):
     i = pc
     pop = my_array[:,i]
     new_array = np.hstack((my_array[:,:i],my_array[:,i+1:]))
+
     return [new_array]
 
 def start(option):
@@ -33,7 +34,7 @@ def start(option):
 
         #generira numpy array
         data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
-
+        
     f.close()
     return data
 

@@ -3,18 +3,12 @@ import bisijao as bci
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-filepath = "D:\Personal\Programiranje\Ledinska_roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt"
-file = open(filepath,"r")
-while True:
-    continue
-
 # Uvoz podatkov
-
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-nepopkolan = bci.start(option)
-data = bci.popcol(nepopkolan, 8)
+nepopkolan = bci.start(option) #uvozi offline podatke ali pa začne stream
+data = bci.popcol(nepopkolan, 8) #rešimo se stolpca z datumom - data je že numpy array
 print(data)
+<<<<<<< HEAD
 
 #file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
 
@@ -75,3 +69,5 @@ print(prva_vrstica.pop(8))
 print(prva_vrstica)
 print(int(lines[6].split(',')[0]))
 '''
+=======
+>>>>>>> master

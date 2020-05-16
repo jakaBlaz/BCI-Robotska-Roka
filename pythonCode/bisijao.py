@@ -31,6 +31,7 @@ def start(option):
         filename = altfile
         f = open(filename)
 
+        #generira numpy array
         data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
 
     f.close()

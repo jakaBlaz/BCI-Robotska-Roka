@@ -13,9 +13,7 @@ def popcol(my_array,pc):
     return [new_array]
 
 def start(option):
-    altfile = '/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/data/a-very-light-test.txt'
-
-
+    altfile = 'a-very-light-test.txt'
 
     if option=='txt':
         print('Reading data...')
@@ -33,6 +31,7 @@ def start(option):
         filename = altfile
         f = open(filename)
 
+        #generira numpy array
         data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
 
     f.close()

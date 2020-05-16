@@ -3,7 +3,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
-altfile = '/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/data/a-very-light-test.txt'
+altfile = 'a-very-light-test.txt'
 
 if option=='txt':
     print('Reading data...')

@@ -32,3 +32,5 @@ plt.subplot(4, 1, 4); plt.plot(x, y4)
 plt.show(block=False) # ne blokira zapiranja figure
 plt.pause(3)  # počakam 3s...
 plt.close()   # ... in zdaj jo lahko zaprem.
+
+#še en komentar

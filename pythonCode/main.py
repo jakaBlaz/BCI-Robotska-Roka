@@ -2,10 +2,13 @@
 import bisijao as bci
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 plt.close('all')
 
+plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
+
 # Uvoz podatkov
-altfile = 'a-very-light-test.txt'
+altfile = 'pythonCode/a-very-light-test.txt'
 option = altfile #input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 nepopkolan = bci.start(option) #uvozi offline podatke ali pa začne stream
 data = np.array(bci.popcol(nepopkolan, 8)) #rešimo se stolpca z datumom - data je že numpy array
@@ -24,7 +27,7 @@ ay = data[:, 6]
 az = data[:, 7]
 
 plt.figure(1)
-plt.subplot(4, 1, 1); plt.plot(x, y1)
+plt.subplot(4, 1, 1); plt.plot(x, y1, color='#ff1080')
 plt.subplot(4, 1, 2); plt.plot(x, y2)
 plt.subplot(4, 1, 3); plt.plot(x, y3)
 plt.subplot(4, 1, 4); plt.plot(x, y4)

@@ -76,10 +76,10 @@ plt.subplot(4, 1, 4); plt.plot(x, y4, color = '#bf00ff')           #četrti subp
 #plt.ylabel('y - EEG kanal(uV)') 
 plt.title('Četri EEG kanal vlomljeno s časom') 
 
-plt.show(block=False) # ne blokira zapiranja figure
+plt.show(block=True) # ne blokira zapiranja figure
 
 
-plt.pause(100000000)  # počakam 3s...
+#plt.pause(100000000)  # počakam 3s...
 
 #plt.close()   # ... in zdaj jo lahko zaprem.
 

@@ -14,8 +14,6 @@ def popcol(my_array,pc):
 
 def start(option):
     altfile = '../a-very-light-test.txt'
-    print(option)
-    temp = option.split(".",1)
 
     if temp[1]=='txt':
         print('Reading data...')

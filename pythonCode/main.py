@@ -8,7 +8,7 @@ plt.close('all')
 plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
 
 # Uvoz podatkov
-altfile = 'pythonCode/a-very-light-test.txt'
+altfile = '../a-very-light-test.txt'
 option = altfile #input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 nepopkolan = bci.start(option) #uvozi offline podatke ali pa začne stream
 data = np.array(bci.popcol(nepopkolan, 8)) #rešimo se stolpca z datumom - data je že numpy array
@@ -34,6 +34,6 @@ plt.subplot(4, 1, 4); plt.plot(x, y4)
 
 plt.show(block=False) # ne blokira zapiranja figure
 plt.pause(3)  # počakam 3s...
-#plt.close()   # ... in zdaj jo lahko zaprem.
+plt.close(fig='all')   # ... in zdaj jo lahko zaprem.
 
 #še en komentar

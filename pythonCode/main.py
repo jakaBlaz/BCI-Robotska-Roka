@@ -19,7 +19,7 @@ y = data[:, 1] # [vrstica, stolpec]
 print(y)
 
 #plt.figure()
-plt.plot(a)
+plt.plot(x, y)
 
 # naming the x axis 
 plt.xlabel('x - indeksi(N)') 
@@ -29,6 +29,10 @@ plt.ylabel('y - EEG kanal(uV)')
 plt.title('Prvi EEG kanal vlomljeno s časom') 
 
 plt.show()
+plt.subplot(4, 1, 1); plt.plot(x, y1)
+plt.subplot(4, 1, 2); plt.plot(x, y2)
+plt.subplot(4, 1, 3); plt.plot(x, y3)
+plt.subplot(4, 1, 4); plt.plot(x, y4)
 
 
 
@@ -49,3 +53,8 @@ plt.ylabel('y2 - EEG kanal(uV)')
 plt.title('Drugi EEG kanal vlomljeno s časom') 
 
 plt.show()
+
+plt.subplot(4, 1, 1); plt.plot(x, y1)
+plt.subplot(4, 1, 2); plt.plot(x, y2)
+plt.subplot(4, 1, 3); plt.plot(x, y3)
+plt.subplot(4, 1, 4); plt.plot(x, y4)

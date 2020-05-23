@@ -4,70 +4,48 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Uvoz podatkov
-option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
+
+altfile = 'a-very-light-test.txt'
+option = altfile #input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 nepopkolan = bci.start(option) #uvozi offline podatke ali pa začne stream
-data = bci.popcol(nepopkolan, 8) #rešimo se stolpca z datumom - data je že numpy array
-print(data)
-<<<<<<< HEAD
+data = np.array(bci.popcol(nepopkolan, 8)) #rešimo se stolpca z datumom - data je že numpy array
+data = data[0, :, :] #3D matriko damo v 2D
+print(data.shape)
 
-#file_object  = open("c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57\OpenBCI-RAW-2020-01-21_17-12-11.txt", "r")
+x = data[:, 0]          #prvi kanal graf
+print(x)
 
+y = data[:, 1] # [vrstica, stolpec]
+print(y)
 
-arr0 = np.array([[0,1,2,3,4,5]])
-arr1 = np.array([[5.77,4.55,5.74,5.02,2.32,110.30]]) 
+#plt.figure()
+plt.plot(a)
 
-# x axis values 
-x = (arr0)
-# corresponding y axis values 
-y = (arr1)
-  
-plt.figure()
-# plotting the points  
-plt.plot(x, y) 
-  
 # naming the x axis 
-plt.xlabel('x - čas') 
+plt.xlabel('x - indeksi(N)') 
 # naming the y axis 
-plt.ylabel('y - podatki') 
-  
-# giving a title to my graph 
-plt.title('Graf podatkov vlomljeno s časom!') 
-  
-# function to show the plot 
-plt.show() 
+plt.ylabel('y - EEG kanal(uV)') 
+
+plt.title('Prvi EEG kanal vlomljeno s časom') 
+
+plt.show()
 
 
-# bla
 
-'''
-fajl = open(pot + "/OpenBCI-RAW-2020-01-21_17-12-11.txt")
-a = np.array()
-for line in fajl:
-    a.append(line)
-a = np.array([1, 2, 3])
-print(a)
-'''
-'''
-#parsanje in čuda
-pot = r"c:\Users\Nal\RobotskaRoka\BCI-Robotska-Roka\data\OpenBCISession_2020-01-21_17-04-57"
-ime =  "/OpenBCI-RAW-2020-01-21_17-12-11.txt"
-celapot = pot + ime
+x2 = data[:, 0]             #drugi kanal graf
+print(x)
 
-fajl = open(celapot, 'r')
-print(celapot, 'OPENED\n')
+y2 = data[:, 2] # [vrstica, stolpec]
+print(y)
 
-#Shranim posamezne vrstice
-lines = np.array([])
-for line in fajl:
-    lines = np.append(lines, line)
+#plt.figure()
+plt.plot(b, 'r')
 
-print(lines[6])
-prva_vrstica = lines[6].split(',')
+# naming the x axis 
+plt.xlabel('x2 - indeksi(N)') 
+# naming the y axis 
+plt.ylabel('y2 - EEG kanal(uV)') 
 
-print(prva_vrstica)
-print(prva_vrstica.pop(8))
-print(prva_vrstica)
-print(int(lines[6].split(',')[0]))
-'''
-=======
->>>>>>> master
+plt.title('Drugi EEG kanal vlomljeno s časom') 
+
+plt.show()

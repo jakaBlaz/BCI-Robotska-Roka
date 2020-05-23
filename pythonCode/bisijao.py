@@ -13,7 +13,7 @@ def popcol(my_array,pc):
     return [new_array]
 
 def start(option):
-    altfile = 'a-very-light-test.txt'
+    altfile = '../a-very-light-test.txt'
     print(option)
     temp = option.split(".",1)
 

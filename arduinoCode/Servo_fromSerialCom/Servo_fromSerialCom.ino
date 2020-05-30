@@ -1,6 +1,6 @@
 #include <Servo.h>
 
-String vrvica = "0";
+String vrvica = "125";
 int kot;
 int servoPin3 = 3; 
 int servoPin5 = 5; 
@@ -40,4 +40,5 @@ void serialEvent() { /*Se ne izvede dokler loop ne pride do konca*/
   Serial.flush(); //Pusha vse podatke (v in ven iz Arduinota)
   vrvica = Serial.readString(); //Prebere dobljene podatke kokr String
   kot = vrvica.toInt(); //spremenimo dobljeni podatek v tip integer
+  Serial.println(vrvica);
 }

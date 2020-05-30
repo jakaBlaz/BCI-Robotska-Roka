@@ -1,4 +1,13 @@
 import serial #knjižnica PySerial
-ser = serial.Serial('COM5',9600)  # open serial port
-ser.write(b'125')
-ser.flush()
+ser = serial.Serial('COM7',9600)  # open serial port
+
+while True:
+    try:
+        kot = (input("Vnesi cifro med 0-255:"))
+        kot = kot.encode(encoding='UTF-8',errors='strict')
+
+        ser.write(kot)
+        ser.flush()
+    except KeyboardInterrupt:
+        ser.close()
+        exit()

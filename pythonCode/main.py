@@ -29,7 +29,7 @@ y4 = data[:, 4]
 ax = data[:, 5]
 ay = data[:, 6]
 az = data[:, 7]
-print(az.shape)
+print(az[15])
 
 plt.figure(1)
 plt.subplot(3, 1, 1); plt.plot(x, ax, color='red'); plt.title('X')
@@ -44,4 +44,10 @@ plt.show(block=True) # ne blokira zapiranja figure
 ##plt.pause(3)  # počakam 3s...
 #plt.close()   # ... in zdaj jo lahko zaprem.
 
-
+idx = 1
+while idx > 0:
+    idx = int(input('Select index: '))
+    print(ax[idx])
+    command = bci.analyze_data(ax[idx], ay[idx], az[idx])
+    print(command)
+    print()

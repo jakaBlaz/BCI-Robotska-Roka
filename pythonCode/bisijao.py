@@ -38,4 +38,10 @@ def start(option):
     f.close()
     return data
 
+def analyze_data(ax, ay, az):
+    if ax < -0.14 and ay > -0.87 and az < -0.11:
+        return True
+    else:
+        return False
+
 

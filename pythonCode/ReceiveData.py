@@ -8,7 +8,7 @@ streams = resolve_stream('type', 'EEG')
 
 # create a new inlet to read from the stream
 inletEEG = StreamInlet(streams[0])
-inletACC = StreamInlet(streams[1])
+inletACC = StreamInlet(streams[0])
 
 while True:
     # get a new sample (you can also omit the timestamp part if you're not

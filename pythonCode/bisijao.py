@@ -1,4 +1,3 @@
-import bisijao as bci
 import numpy as np 
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -16,15 +15,15 @@ def popcol(my_array,pc):
 def start(option):
     altfile = '../a-very-light-test.txt'
 
-    if option=='txt':
+    if temp[1]=='txt':
         print('Reading data...')
         root = Tk()
         root.withdraw()
-        filename = askopenfilename()
+        filename = option
         f = open(filename)
         root.destroy()
         data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
-    elif option == 'stream':
+    elif temp[1] == 'stream':
         print('Starting stream...')
         data = None
     else:

@@ -3,3 +3,5 @@ pythonCode/__pycache__/bisijao.cpython-38.pyc
 .vscode/arduino.json
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+PyDrive/secret/
+pythonCode/__pycache__/

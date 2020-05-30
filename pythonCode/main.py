@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 plt.close('all')
 
-plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
+plt.style.use(r'./stylelib/bci-style.mplstyle')
 
 # Uvoz podatkov
 altfile = '../a-very-light-test.txt'
@@ -34,6 +34,6 @@ plt.subplot(4, 1, 4); plt.plot(x, y4)
 
 plt.show(block=False) # ne blokira zapiranja figure
 plt.pause(3)  # počakam 3s...
-plt.close(fig='all')   # ... in zdaj jo lahko zaprem.
+plt.close(fig = "all")   # ... in zdaj jo lahko zaprem.
 
 #še en komentar

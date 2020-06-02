@@ -13,27 +13,23 @@ def popcol(my_array,pc):
 
     return [new_array]
 
-def start(option):
+def importData(option):
     altfile = 'a-very-light-test.txt'
 
-    if option=='txt':
+    if option == 'txt':
         print('Reading data...')
         root = Tk()
         root.withdraw()
         filename = askopenfilename()
         f = open(filename)
         root.destroy()
-        data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
-    elif option == 'stream':
-        print('Starting stream...')
-        data = None
     else:
         print('Alternative...')
         filename = altfile
         f = open(filename)
 
-        #generira numpy array
-        data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
+    #generira numpy array
+    data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
         
     f.close()
     return data

@@ -10,7 +10,7 @@ numStreams = 3
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
 stream1 = resolve_stream('name', 'x')
-stream2 = resolve_stream('name', 'y')
+#stream2 = resolve_stream('name', 'y')
 #stream3 = resolve_stream('name', 'z')
 print("stream_name1", stream1)
 print("stream_name2", stream2)

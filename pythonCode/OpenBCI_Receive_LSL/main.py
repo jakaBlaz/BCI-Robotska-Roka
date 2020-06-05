@@ -76,13 +76,13 @@ elif option == 'stream':
         
         #sample2, timestamp = inlet2.pull_sample()
         if i < 10:
-            data.append(sample1)
+            data.append(sample1[0])
             i = i+1
         else:
             i = 0;
             print("standardna deviacija na desetih vzorcih")
             print(np.std(data))
-            print(data)
+            print(np.mean(data))
             data = []
             time.sleep(2)
 

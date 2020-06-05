@@ -24,17 +24,27 @@
 
 import sys
 import lib.streamerlsl as streamerlsl
+import random
 
 sys.path.append('/usr/local/Cellar/pyqt@4/4.12.1_1/lib/python2.7/site-packages') #inštalacija PyQt4
 
 ### set stream parameters ###
-
+random_id = random.randint(0,255)
+stream1 = {'name': 'openbci_eeg',
+          'type': 'EEG',
+          'channels': 4,
+          'sample_rate': 200.0,
+          'datatype': 'float32',
+          'id': 'openbci_eeg_id' + str(random_id)} # Hz
+stream2 = {'name': 'openbci_aux',
+          'type': 'AUX',
+          'channels': 3,
+          'sample_rate': 200.0,
+          'datatype': 'float32',
+          'id': 'openbci_aux_id' + str(random_id)}
 #############################
 
-def main(argv):
-  stream1 = None
-  stream2 = None
-  
+def main(argv):  
   # if no arguments are provided, default to the stream parameters specified below
   if not argv:
     lsl = streamerlsl.StreamerLSL(GUI=False)

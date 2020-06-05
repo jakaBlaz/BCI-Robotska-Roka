@@ -3,6 +3,7 @@ import bisijao as bci
 import numpy as np
 import matplotlib.pyplot as plt
 from pylsl import StreamInlet, resolve_stream
+import time
 plt.close('all')
 
 #print(plt.style.available)
@@ -61,19 +62,29 @@ elif option == 'stream':
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
     stream1 = resolve_stream('name', 'obci_eeg1')
-    stream2 = resolve_stream('name', 'obci_eeg2')
+    #stream2 = resolve_stream('name', 'obci_eeg2')
     
     # create a new inlet to read from the stream
     inlet1 = StreamInlet(stream1[0])
-    inlet2 = StreamInlet(stream2[0])
-    
+    #inlet2 = StreamInlet(stream2[0])
+    i = 0
+    data = []
     while True:
         # get a new sample (you can also omit the timestamp part if you're not
         # interested in it)
         sample1, timestamp = inlet1.pull_sample()
-        sample2, timestamp = inlet2.pull_sample()
         
-        print()
-        print(timestamp, sample)
+        #sample2, timestamp = inlet2.pull_sample()
+        if i < 10:
+            data.append(sample1)
+            i = i+1
+        else:
+            i = 0;
+            print("standardna deviacija na desetih vzorcih")
+            print(np.std(data))
+            print(data)
+            data = []
+            time.sleep(2)
+
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13')

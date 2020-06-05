@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 '''
   openbci_lsl.py
   ---------------
@@ -24,21 +25,33 @@
 import sys
 import lib.streamerlsl as streamerlsl
 
+sys.path.append('/usr/local/Cellar/pyqt@4/4.12.1_1/lib/python2.7/site-packages') #inštalacija PyQt4
+
+### set stream parameters ###
+
+#############################
+
 def main(argv):
+  stream1 = None
+  stream2 = None
   
-  # if no arguments are provided, default to the GUI application
+  # if no arguments are provided, default to the stream parameters specified below
   if not argv:
+    lsl = streamerlsl.StreamerLSL(GUI=False)
+    
+    '''
+    # PyQt4 Gui ne dela, ker je pač PyQt4!
     import lib.gui as gui
     from PyQt4 import QtGui
     app = QtGui.QApplication(sys.argv)
     window = gui.GUI()
     sys.exit(app.exec_())
- 
+    '''
   # if user specifies CLI using the "--stream" argument, check if a port is also specified
-  else:
-    if argv[0] == '--stream':
+  else:                                             # izklopljen GUI
+    if argv[0] == '--stream':                       # ni definiran port /dev/tty.*
       lsl = streamerlsl.StreamerLSL(GUI=False)
-    else:
+    else:                                           # definiran port /dev/tty.*
       try:
         if argv[1] != '--stream':
           print ("Command '%s' not recognized" % argv[1])
@@ -48,8 +61,8 @@ def main(argv):
         return
       port = argv[0]
       lsl = streamerlsl.StreamerLSL(port=port,GUI=False)
-    lsl.create_lsl()
-    lsl.begin()
+  lsl.create_lsl(stream1=stream1, stream2=stream2)
+  lsl.begin()
     
 
 if __name__ == '__main__':

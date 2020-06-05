@@ -60,15 +60,19 @@ elif option == 'stream':
 
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
-    stream = resolve_stream('name', 'obci_eeg1')
-
+    stream1 = resolve_stream('name', 'obci_eeg1')
+    stream2 = resolve_stream('name', 'obci_eeg2')
+    
     # create a new inlet to read from the stream
-    inlet = StreamInlet(stream[0])
-
+    inlet1 = StreamInlet(stream1[0])
+    inlet2 = StreamInlet(stream2[0])
+    
     while True:
         # get a new sample (you can also omit the timestamp part if you're not
         # interested in it)
-        sample, timestamp = inlet.pull_sample()
+        sample1, timestamp = inlet1.pull_sample()
+        sample2, timestamp = inlet2.pull_sample()
+        
         print()
         print(timestamp, sample)
 else:

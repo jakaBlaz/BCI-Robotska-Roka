@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 '''
   streamerlsl.py
   ---------------
@@ -13,14 +15,17 @@
 
 '''
 
+import sys
+sys.path.append('/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages')
+
 import threading
 import signal
 from collections import OrderedDict
 import time
 import lib.open_bci_v3 as bci
 from pylsl import StreamInfo, StreamOutlet
-import sys
 import random
+sys.path.append('/usr/local/Cellar/pyqt@4/4.12.1_1/lib/python2.7/site-packages') #inštalacija PyQt4
 
 GUI = True
 try:

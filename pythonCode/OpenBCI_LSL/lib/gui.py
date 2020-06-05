@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 '''
   gui.py
   ------
@@ -19,7 +21,7 @@ import time
 import sys
 import lib.filters as filters
 np.set_printoptions(threshold=np.inf)
-
+sys.path.append('/usr/local/Cellar/pyqt@4/4.12.1_1/lib/python2.7/site-packages')  #inštalacija PyQt4
 
 try:
   from PyQt4 import QtGui,QtCore

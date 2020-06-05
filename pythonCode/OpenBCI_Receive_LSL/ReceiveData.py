@@ -38,10 +38,10 @@ print(stream_host)
 print(stream_n_channels)
 
 #wait before streaming
-time.sleep(180)
+time.sleep(1)
 while True:
     # get a new sample (you can also omit the timestamp part if you're not
     # interested in it)
     sample, timestamp = inlet.pull_sample()
     print()
-    print(timestamp, sample)
+    print(sample[0])

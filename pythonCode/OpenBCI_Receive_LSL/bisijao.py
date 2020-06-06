@@ -34,10 +34,41 @@ def importData(option):
     f.close()
     return data
 
-def analyze_data(ax, ay, az):
-    if ax < -0.14 and ay > -0.87 and az < -0.11:
-        return True
+def analyze_ACCEL(ax, ay, az):
+    '''
+        Funkcija vrne BOOL glede na postavitev pospeškometra. (Meje so določene 
+        eksperimentalno s pospeškometrom pritrjenim na zatilje.)
+    '''
+    if ax < -0.14 and ay > -0.87 and az < -0.11: 
+        return True     # premik glave naprej
     else:
-        return False
+        return False    # glava pokonci
+
+def analyze_EMG(signal, meja, toleranca, previousBOOL):
+    '''
+    Funkcija izračuna RMS na vhodnem vektorju meritev in vrne BOOL vrednost 
+    glede na mejo, ki jo določimo ob klicu funkcije.
+        Input:
+            signal...vzorec v realnem času, ki ga obravnavamo
+            meja...določa odpiranje/zapiranje roke
+            toleranca...definira kakšna odstopanja od meje so dopustna
+            previousBOOL...prejšnje logično stanje robotske roke, vpliva na novo stanje
+        Output:
+            BOOL
+    '''
+    rms = np.sqrt(np.mean(np.square(signal)))
+    e = rms * toleranca # napaka se določi kot delež rms vrednosti
+    print("{0:5.2f} uV".format(rms), end="")
+
+    if previousBOOL is True: # roka odprta, torej je bil rms signala prej nad mejo
+        if rms < meja - e: 
+            return False    # RMS mora zdaj pasti pod nižjo vrednost od meje, če hočemo v drugo logično stanje
+        else: 
+            return True     # drugače stanje ostane isto
+    else:
+        if rms > meja + e:
+            return True     # zdaj mora biti RMS zrasti nekoliko višje od meje da se zamenja stanje
+        else:
+            return False
 
 

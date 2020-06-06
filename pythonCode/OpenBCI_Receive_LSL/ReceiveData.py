@@ -7,19 +7,17 @@ import time
 r = ContinuousResolver(prop='name', value='x')
 time.sleep(3)
 streams = r.results()
-print('KKK', streams)
+print('Streams >>', streams)
 for stream in streams:
     print('results >>', stream)
     print("stream_name", stream.name())
-
-
     print("/--------------/")
 
 
 
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
-name = 'obci_eeg1'
+name = 'obci_eeg'
 mac = 'EEG'
 stream = resolve_streams()
 print(stream)
@@ -44,4 +42,4 @@ while True:
     # interested in it)
     sample, timestamp = inlet.pull_sample()
     print()
-    print(sample[0])
+    print(sample)

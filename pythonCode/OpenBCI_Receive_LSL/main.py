@@ -3,19 +3,29 @@ import bisijao as bci
 import numpy as np
 import matplotlib.pyplot as plt
 from pylsl import StreamInlet, resolve_stream
+import scipy.fftpack as sfp
 import time
-plt.close('all')
 
+### Nastavitve analize signala ###
+EMG_meja = 55 # uV
+N = 50 # Sample size
+toleranca = 0.1 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
+i = 0 # iterator za posodabljanje vzorcev v vektorju signal
+signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
+flag = False # flag to notify when vector signal is filled with samples
+previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
+##################################
 #print(plt.style.available)
 ##plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
 
 # Uvoz podatkov
 altfile = 'a-very-light-test.txt'
-option = input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
+option = 'stream' #input("Read .txt file or start stream? Type 'txt' or 'stream' >> ")
 
-print(option)
+print('option >>>', option)
 
 if option == 'txt':
+    """Read a multi-channel time series from file."""
     nepopkolan = bci.importData(option) #uvozi offline podatke
     data = np.array(bci.popcol(nepopkolan, 8)) #rešimo se stolpca z datumom - data je že numpy array
     data = data[0, :, :] #3D matriko damo v 2D
@@ -57,34 +67,43 @@ if option == 'txt':
         print(command)
         print()
 elif option == 'stream':
-    """Example program to show how to read a multi-channel time series from LSL."""
+    """Read a multi-channel time series from LSL."""
 
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
-    stream1 = resolve_stream('name', 'obci_eeg1')
-    #stream2 = resolve_stream('name', 'obci_eeg2')
+    stream1 = resolve_stream('name', 'obci_eeg')
+    #stream2 = resolve_stream('name', 'obci_aux')
     
     # create a new inlet to read from the stream
     inlet1 = StreamInlet(stream1[0])
     #inlet2 = StreamInlet(stream2[0])
-    i = 0
-    data = []
+
+    # prikažem dolžino vzorčnega vektorja
+    print("sample size:", len(signal)) 
+    time.sleep(3)
+
+    start = time.time()
     while True:
         # get a new sample (you can also omit the timestamp part if you're not
         # interested in it)
         sample1, timestamp = inlet1.pull_sample()
-        
         #sample2, timestamp = inlet2.pull_sample()
-        if i < 10:
-            data.append(sample1[0])
-            i = i+1
+
+        if i < N:   # signal dolžine N
+            signal[i] = sample1[0]  # sproti posodabljam po 1 vzorec
+            i = i + 1
+            if signal[-1] != 0.0 and not flag: # preverjam, kdaj bo vektor "signal" napolnjen z vzorci
+                print('\n################# Sample Ready #################')
+                flag = True
+                end = time.time()
+                print(f"Sample filled in {end - start}s, starting stream...")
+                time.sleep(0.5)
         else:
             i = 0;
-            print("standardna deviacija na desetih vzorcih")
-            print(np.std(data))
-            print(np.mean(data))
-            data = []
-            time.sleep(2)
-
+            print(f"RMS na {N} vzorcih meja {EMG_meja} uV >>> ", end="")
+            currentBOOL = bci.analyze_EMG(signal, EMG_meja, toleranca, previousBOOL)
+            previousBOOL = currentBOOL
+            print(" ", currentBOOL)
+            #time.sleep(1)
 else:
-    raise ValueError('Unknown argument "option" in main.py, line 13')
+    raise ValueError('Unknown argument "option" in main.py, line 13') 

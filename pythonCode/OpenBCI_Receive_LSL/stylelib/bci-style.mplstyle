@@ -1,0 +1,4 @@
+#to je stil za bci grafe
+
+axes.xmargin: 0.5
+axes.ymargin: 0.5

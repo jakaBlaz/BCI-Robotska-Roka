@@ -1,3 +1,5 @@
+# TODO - Stream TimeSeries pošilja surov signal in ga je potrebno filtrirat preden računamo RMS #
+
 #to je glavna skripta
 import bisijao as bci
 import numpy as np
@@ -7,7 +9,13 @@ import scipy.fftpack as sfp
 import time
 
 ### Nastavitve analize signala ###
-
+EMG_meja = 1000 # uV
+N = 20 # Sample size
+toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
+i = 0 # iterator za posodabljanje vzorcev v vektorju signal
+signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
+flag = False # flag to notify when vector signal is filled with samples
+previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 ##################################
 #print(plt.style.available)
 ##plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
@@ -66,25 +74,41 @@ elif option == 'stream':
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
     stream1 = resolve_stream('name', 'obci_eeg1')
-    #stream2 = resolve_stream('name', 'obci_aux')
+    #stream2 = resolve_stream('name', 'obci_eeg2')
     
     # create a new inlet to read from the stream
     inlet1 = StreamInlet(stream1[0])
     #inlet2 = StreamInlet(stream2[0])
 
+    # prikažem dolžino vzorčnega vektorja
+    print("sample size:", len(signal)) 
+    time.sleep(3)
+
+    start = time.time()
     while True:
         # get a new sample (you can also omit the timestamp part if you're not
         # interested in it)
         sample1, timestamp = inlet1.pull_sample()
         #sample2, timestamp = inlet2.pull_sample()
 
-        a = sample1
-        ax = a[0]
-        ay = a[1]
-        az = a[2]
-        print("a >>> [{0:5.2f}, {1:5.2f}, {2:5.2f}] g".format(ax, ay, az), end="")
-        currentBOOL = bci.analyze_ACCEL(ax, ay, az)
-        print(" ", currentBOOL)
-        #time.sleep(1)
+        if i < N:   # signal dolžine N
+            #tmp = signal[0:-1]
+            #signal[1:] = tmp
+            signal[i] = sample1[0]  # sproti dodajam po 1 vzorec na 1.mesto
+            #print(sample1)
+            i = i + 1
+            if signal[-1] != 0.0 and not flag: # preverjam, kdaj bo vektor "signal" napolnjen z vzorci
+                print('\n################# Sample Ready #################')
+                flag = True
+                end = time.time()
+                print(f"Sample filled in {end - start}s, starting stream...")
+                #time.sleep(0.5)
+        else:
+            i = 0;
+            print(f"RMS na {N} vzorcih meja {EMG_meja} uV >>> ", end="")
+            currentBOOL = bci.analyze_EMG(signal, EMG_meja, toleranca, previousBOOL)
+            previousBOOL = currentBOOL
+            print(" ", currentBOOL)
+            #time.sleep(1)
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13') 

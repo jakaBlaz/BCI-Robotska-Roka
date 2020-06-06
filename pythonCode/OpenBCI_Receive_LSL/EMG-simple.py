@@ -7,9 +7,9 @@ import scipy.fftpack as sfp
 import time
 
 ### Nastavitve analize signala ###
-EMG_meja = 55 # uV
-N = 50 # Sample size
-toleranca = 0.1 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
+EMG_meja = 50 # uV
+N = 20 # Sample size
+toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
 flag = False # flag to notify when vector signal is filled with samples
@@ -71,16 +71,14 @@ elif option == 'stream':
 
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
-    stream1 = resolve_stream('name', 'obci_eeg')
-    #stream2 = resolve_stream('name', 'obci_aux')
+    stream1 = resolve_stream('name', 'obci_eeg1')
+    #stream2 = resolve_stream('name', 'obci_eeg2')
     
     # create a new inlet to read from the stream
     inlet1 = StreamInlet(stream1[0])
     #inlet2 = StreamInlet(stream2[0])
 
     # prikažem dolžino vzorčnega vektorja
-    print("sample size:", len(signal)) 
-    time.sleep(3)
 
     start = time.time()
     while True:
@@ -89,21 +87,7 @@ elif option == 'stream':
         sample1, timestamp = inlet1.pull_sample()
         #sample2, timestamp = inlet2.pull_sample()
 
-        if i < N:   # signal dolžine N
-            signal[i] = sample1[0]  # sproti posodabljam po 1 vzorec
-            i = i + 1
-            if signal[-1] != 0.0 and not flag: # preverjam, kdaj bo vektor "signal" napolnjen z vzorci
-                print('\n################# Sample Ready #################')
-                flag = True
-                end = time.time()
-                print(f"Sample filled in {end - start}s, starting stream...")
-                time.sleep(0.5)
-        else:
-            i = 0;
-            print(f"RMS na {N} vzorcih meja {EMG_meja} uV >>> ", end="")
-            currentBOOL = bci.analyze_EMG(signal, EMG_meja, toleranca, previousBOOL)
-            previousBOOL = currentBOOL
-            print(" ", currentBOOL)
-            #time.sleep(1)
+        print(sample1)  # sproti po 1 vzorec
+        #time.sleep(1)
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13') 

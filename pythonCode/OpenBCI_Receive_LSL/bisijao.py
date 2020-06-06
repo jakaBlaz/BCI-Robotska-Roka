@@ -46,8 +46,8 @@ def analyze_ACCEL(ax, ay, az):
 
 def analyze_EMG(signal, meja, toleranca, previousBOOL):
     '''
-    Funkcija izračuna RMS na vhodnem vektorju meritev in vrne BOOL vrednost 
-    glede na mejo, ki jo določimo ob klicu funkcije.
+        Funkcija izračuna RMS na vhodnem vektorju meritev in vrne BOOL vrednost 
+        glede na mejo, ki jo določimo ob klicu funkcije.
         Input:
             signal...vzorec v realnem času, ki ga obravnavamo
             meja...določa odpiranje/zapiranje roke
@@ -56,8 +56,11 @@ def analyze_EMG(signal, meja, toleranca, previousBOOL):
         Output:
             BOOL
     '''
-    rms = np.sqrt(np.mean(np.square(signal)))
-    e = rms * toleranca # napaka se določi kot delež rms vrednosti
+
+    # ROOT MEAN SQUARE   
+    rms = np.sqrt(np.mean(signal**2)) #np.sqrt(np.mean(np.square(signal)))
+
+    e = np.std(signal) * toleranca # napaka se določi kot delež std vrednosti
     print("{0:5.2f} uV".format(rms), end="")
 
     if previousBOOL is True: # roka odprta, torej je bil rms signala prej nad mejo

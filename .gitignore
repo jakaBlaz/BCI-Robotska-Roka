@@ -1,8 +1,9 @@
 .vscode/settings.json
 .vscode/c_cpp_properties.json
 .vscode/arduino.json
-.vscode/settings.json
-.vscode/settings.json
 pythonCode/OpenBCI_Receive_LSL/__pycache__/bisijao.cpython-38.pyc
 .vscode/settings.json
 pythonCode/PyDrive/settings.yaml
+pythonCode/PyDrive/client_secrets.json
+pythonCode/PyDrive/credentials.json
+pythonCode/PyDrive/mycreds.txt

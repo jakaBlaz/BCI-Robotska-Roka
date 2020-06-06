@@ -9,7 +9,7 @@ import scipy.fftpack as sfp
 import time
 
 ### Nastavitve analize signala ###
-EMG_meja = 50 # uV
+EMG_meja = 1000 # uV
 N = 20 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal

@@ -87,7 +87,7 @@ elif option == 'stream':
         sample1, timestamp = inlet1.pull_sample()
         #sample2, timestamp = inlet2.pull_sample()
 
-        print(sample1[0])  # sproti po 1 vzorec
-        time.sleep(1)
+        print(sample1)  # sproti po 1 vzorec
+        #time.sleep(1)
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13') 

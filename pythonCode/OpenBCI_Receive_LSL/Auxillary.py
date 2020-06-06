@@ -65,7 +65,7 @@ elif option == 'stream':
 
     # first resolve an EEG stream on the lab network
     print("looking for data stream...")
-    stream1 = resolve_stream('name', 'obci_eeg')
+    stream1 = resolve_stream('name', 'obci_eeg1')
     #stream2 = resolve_stream('name', 'obci_aux')
     
     # create a new inlet to read from the stream

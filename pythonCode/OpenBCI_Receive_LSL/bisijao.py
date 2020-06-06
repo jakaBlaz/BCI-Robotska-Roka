@@ -1,4 +1,3 @@
-import bisijao as bci
 import numpy as np 
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename

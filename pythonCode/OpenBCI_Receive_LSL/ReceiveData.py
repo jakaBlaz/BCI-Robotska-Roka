@@ -17,14 +17,17 @@ for stream in streams:
 
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
-name = 'obci_eeg'
-mac = 'EEG'
-stream = resolve_streams()
-print(stream)
+name1 = 'obci_eeg'
+name2 = 'obci_aux'
+mac1 = 'EEG'
+mac2 = 'AUX'
+stream1 = resolve_stream('name', name1)
+#stream2 = resolve_stream('type', mac2)
 
 # create a new inlet to read from the stream
-inlet = StreamInlet(stream[0])
-stream_info = inlet.info()
+inlet1 = StreamInlet(stream1[0])
+#inlet2 = StreamInlet(stream2[0])
+stream_info = inlet1.info()
 stream_name = stream_info.name()
 stream_mac = stream_info.type()
 stream_host = stream_info.hostname() 
@@ -36,10 +39,10 @@ print(stream_host)
 print(stream_n_channels)
 
 #wait before streaming
-time.sleep(1)
+time.sleep(10)
 while True:
     # get a new sample (you can also omit the timestamp part if you're not
     # interested in it)
-    sample, timestamp = inlet.pull_sample()
+    sample, timestamp = inlet1.pull_sample()
     print()
     print(sample)

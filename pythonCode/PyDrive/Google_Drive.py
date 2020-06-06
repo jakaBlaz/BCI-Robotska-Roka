@@ -19,14 +19,16 @@ gauth.SaveCredentialsFile("mycreds.txt")
 drive = GoogleDrive(gauth)
 
 ##FUNKCIJE
-def delete_file(file1):
-  file1 = drive.CreateFile({'parents': [{'id': '1eeA-y9DjF4zOuH4z5wkOB5nSehRtGneV'}],'id': file1['id']})  # Create GoogleDriveFile instance with title 'Hello.txt'.
+def delete_file(file_id):
+  file1 = drive.CreateFile({'parents': [{'id': '1eeA-y9DjF4zOuH4z5wkOB5nSehRtGneV'}],'id': file_id})
   file1.Delete()
 
 def create_file(name,content):
-  file1 = drive.CreateFile({'title': name,'parents': [{'id': '1eeA-y9DjF4zOuH4z5wkOB5nSehRtGneV'}],'id': "1o7DvB0e3hUF_V4q2bafe8PW8qDHeXYOw"})  # Create GoogleDriveFile instance with title 'Hello.txt'.
+  file1 = drive.CreateFile({'title': name,'parents': [{'id': '1eeA-y9DjF4zOuH4z5wkOB5nSehRtGneV'}]})  # Create GoogleDriveFile instance with title 'Hello.txt'.
   file1.SetContentString(content,encoding="utf-8")
   file1.Upload()
+  print("File was created under the id %s" %(file1['id']))
+  return file1
 
 def list_files():
   final_file_list = []
@@ -41,6 +43,11 @@ def get_file_metadata(file_id):
   # Fetches all basic metadata fields, including file size, last modified etc.
   file1.FetchMetadata()
   print("File metadata: %s" %(file1))
+
+#create_file("Testni_File.txt","Nek testni text, da vidim ce to dela kot more. abcčdefghijklmnoprsštuvzž")
+#files = list_files()
+#delete_file("16J9sx2qh2-fFsECfzFDWtk_E1iN6UnVY")
+
 
 '''
 # Fetches all metadata available.

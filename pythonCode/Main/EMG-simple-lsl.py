@@ -8,10 +8,8 @@ import time
 
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
-N = 20 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
-signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 ##################################
@@ -88,6 +86,6 @@ elif option == 'stream':
         #sample2, timestamp = inlet2.pull_sample()
 
         print(sample1)  # sproti po 1 vzorec
-        #time.sleep(1)
+        time.sleep(1)
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13') 

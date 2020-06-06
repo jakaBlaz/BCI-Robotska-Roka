@@ -56,8 +56,9 @@ def analyze_EMG(signal, meja, toleranca, previousBOOL):
         Output:
             BOOL
     '''
-    rms = np.sqrt(np.mean(np.square(signal)))
-    e = rms * toleranca # napaka se določi kot delež rms vrednosti
+    rms = np.sqrt(np.mean(signal**2)) #np.sqrt(np.mean(np.square(signal)))
+
+    e = np.std(signal) * toleranca # napaka se določi kot delež std vrednosti
     print("{0:5.2f} uV".format(rms), end="")
 
     if previousBOOL is True: # roka odprta, torej je bil rms signala prej nad mejo

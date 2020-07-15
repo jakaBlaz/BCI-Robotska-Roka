@@ -19,7 +19,7 @@ signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 
-style.use('fivethirtyeight')
+#style.use('fivethirtyeight')
 
 # Create figure for plotting
 fig = plt.figure()
@@ -71,7 +71,17 @@ if option.strip() == "stream":
     #time.sleep(0.5)
 elif option.strip() == "txt":
     podatki,knjiznica = bci.importData(option)
-    print(podatki)
+    izbranKanal = input("s katerim kanalom želiš delati? 0-3 >> ")
+    try:
+        izbranKanal = "EXG Channel " + izbranKanal
+
+    except:
+        print(izbranKanal," is not a Valid option")
+    podatki = knjiznica[izbranKanal]
+    timestamp = knjiznica["Timestamp"]
 
 else:
-    raise ValueError('Unknown argument "option" in main.py, line 13') 
+    raise ValueError('Unknown argument "option" in main.py, try again') 
+
+plt.plot(timestamp,podatki)
+plt.show()

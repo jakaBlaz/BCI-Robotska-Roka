@@ -41,6 +41,7 @@ def importData(option):
     f.close()
     dictionary.pop("test")
     dictionary.pop("Timestamp (Formatted)")
+    dictionary.pop("Sample Index")
     return data,dictionary
 
 def analyze_ACCEL(ax, ay, az):

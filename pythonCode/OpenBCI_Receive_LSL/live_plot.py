@@ -8,11 +8,16 @@ import bisijao as bci
 import numpy as np
 from pylsl import StreamInlet, resolve_stream
 import scipy.fftpack as sfp
+from scipy.fft import fft
 import datetime as dt
 
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
-N = 20 # Sample size
+Fs = 200 #Sample rate
+# Number of sample points
+N = 600
+# sample spacing
+T = 1.0 / 800.0
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
@@ -81,6 +86,25 @@ elif option.strip() == "txt":
     timestamp = knjiznica["Timestamp"]
     plt.plot(timestamp,podatki)
     plt.show()
+
+elif option.strip() == "test":
+    podatki,knjiznica = bci.importData("txt")
+    podatki = knjiznica["EXG Channel 0"]
+    print(podatki.size)
+    fig, (ax_orig, ax_fft) = plt.subplots(2, 1)
+    N = podatki.size
+    T = 1.0 / Fs
+    x = np.linspace(0.0,N,N)
+    ax_orig.plot(x,podatki)
+    ax_orig.set_title('Original Signal')
+
+    y = fft(podatki)
+    x = np.linspace(0.0,1.0/(2.0*T),N//2)
+    ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
+    ax_fft.set_title('FFT Signal?')
+    plt.grid()
+    plt.show()
+
 
 else:
     raise ValueError('Unknown argument "option" in main.py, try again') 

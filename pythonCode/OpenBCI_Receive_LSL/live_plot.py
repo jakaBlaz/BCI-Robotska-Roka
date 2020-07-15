@@ -79,9 +79,9 @@ elif option.strip() == "txt":
         print(izbranKanal," is not a Valid option")
     podatki = knjiznica[izbranKanal]
     timestamp = knjiznica["Timestamp"]
+    plt.plot(timestamp,podatki)
+    plt.show()
 
 else:
     raise ValueError('Unknown argument "option" in main.py, try again') 
 
-plt.plot(timestamp,podatki)
-plt.show()

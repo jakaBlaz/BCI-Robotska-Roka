@@ -26,7 +26,7 @@ print('option >>>', option)
 
 if option == 'txt':
     """Read a multi-channel time series from file."""
-    nepopkolan = bci.importData(option) #uvozi offline podatke
+    nepopkolan,dictionary = bci.importData(option) #uvozi offline podatke
     data = np.array(bci.popcol(nepopkolan, 8)) #rešimo se stolpca z datumom - data je že numpy array
     data = data[0, :, :] #3D matriko damo v 2D
     print('Velikost numpy podatkovnega polja:', data.shape)

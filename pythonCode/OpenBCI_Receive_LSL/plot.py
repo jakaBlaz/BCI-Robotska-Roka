@@ -142,10 +142,17 @@ elif option.strip() == "test":
     ax_fft_allFilters.plot(x , 2.0/N * np.abs(y[0:N//2]))
     ax_fft_allFilters.set_title('FFT Signal completely filtered?')
     plt.grid()
+    
+    y = sfp.ifft(y)
+    f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
+    print("f = ",f)
+    print("Pxx = ",Pxx)
 
+    plt.figure(num=2)
+    plt.xlim([0, 50])
+    plt.plot(f,Pxx)
+    plt.xlabel('frequency [Hz]')
+    plt.ylabel('PSD [V**2/Hz]')
     plt.show()
-
-
 else:
     raise ValueError('Unknown argument "option" in main.py, try again') 
-

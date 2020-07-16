@@ -129,7 +129,6 @@ elif option.strip() == "test":
     x = np.linspace(0.0,100,N//2)
     ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
     ax_fft.set_title('FFT Signal (not filtered)')
-    ax_fft.xlabel("frequency [Hz]")
     
     xn = podatki #lahko bi isto naredil sfp.ifft(y) pa bi bil na istem
 
@@ -142,6 +141,7 @@ elif option.strip() == "test":
 
     #Notch filter da se znebiš 50Hz motnje (ki jo dobiš iz omrežne frekvence/napetosti/elektrike)
     y = fft(signal.filtfilt(b, a, xn))
+    y = fft(butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
     x = np.linspace(0.0,100,N//2)
     ax_fft_filtfilt.plot(x , 2.0/N * np.abs(y[0:N//2]))
     ax_fft_filtfilt.set_title('FFT Signal w/ notch and bandpass filter')

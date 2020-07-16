@@ -138,7 +138,7 @@ elif option.strip() == "test":
     ax_fft_filtfilt.set_title('FFT Signal filtfilt')
     plt.grid()
 
-    y = (butter_bandpass_filter(x, lowcut, highcut, fs, order=6))
+    y = fft(butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
     x = np.linspace(0.0,100,N//2)
     ax_fft_allFilters.plot(x , 2.0/N * np.abs(y[0:N//2]))
     ax_fft_allFilters.set_title('FFT Signal completely filtered?')

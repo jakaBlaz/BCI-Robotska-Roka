@@ -113,10 +113,11 @@ elif option.strip() == "test":
     b, a = signal.iirnotch(w0, Q)
     zi = signal.lfilter_zi(b, a)
     
-
+    #Import data
     podatki,knjiznica = bci.importData("txt")
     podatki = knjiznica["EXG Channel 0"]
-    print(podatki.size)
+
+    #Initialize plot diagram
     fig, (ax_orig, ax_fft,ax_fft_filtfilt,ax_fft_allFilters) = plt.subplots(4, 1)
     N = podatki.size
     T = 1.0 / Fs
@@ -125,13 +126,11 @@ elif option.strip() == "test":
     ax_orig.set_title('Original Signal')
 
     y = fft(podatki)
-    print(y)
     x = np.linspace(0.0,100,N//2)
     ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
     ax_fft.set_title('FFT Signal?')
     
     xn = podatki
-
     y = fft(signal.filtfilt(b, a, xn))
     x = np.linspace(0.0,100,N//2)
     ax_fft_filtfilt.plot(x , 2.0/N * np.abs(y[0:N//2]))

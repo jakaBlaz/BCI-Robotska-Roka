@@ -118,39 +118,44 @@ elif option.strip() == "test":
     podatki = knjiznica["EXG Channel 0"]
 
     #Initialize plot diagram
-    fig, (ax_orig, ax_fft,ax_fft_filtfilt,ax_fft_allFilters) = plt.subplots(4, 1)
+    fig, (ax_orig, ax_fft,ax_fft_bandpassFilters,ax_fft_filtfilt) = plt.subplots(4, 1)
     N = podatki.size
     T = 1.0 / Fs
-    x = np.linspace(0.0,N,N)
+    x = np.linspace(0.0,N,N) #preposto razporedim vse vzorce po času (kar je prb 48 min + 60s + 200Hz = 576000, kar je skor realna številka ki je 576178
     ax_orig.plot(x,podatki)
     ax_orig.set_title('Original Signal')
 
     y = fft(podatki)
     x = np.linspace(0.0,100,N//2)
     ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
-    ax_fft.set_title('FFT Signal?')
+    ax_fft.set_title('FFT Signal (not filtered)')
+    ax_fft.xlabel("frequency [Hz]")
     
-    xn = podatki
+    xn = podatki #lahko bi isto naredil sfp.ifft(y) pa bi bil na istem
+
+    #Bandpass filter, da se znebiš motenj pri nizkih in visokih frekvencah
+    y = fft(butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
+    x = np.linspace(0.0,100,N//2)
+    ax_fft_bandpassFilters.plot(x , 2.0/N * np.abs(y[0:N//2]))
+    ax_fft_bandpassFilters.set_title('FFT Signal bandpass filter')
+    plt.grid()
+
+    #Notch filter da se znebiš 50Hz motnje (ki jo dobiš iz omrežne frekvence/napetosti/elektrike)
     y = fft(signal.filtfilt(b, a, xn))
     x = np.linspace(0.0,100,N//2)
     ax_fft_filtfilt.plot(x , 2.0/N * np.abs(y[0:N//2]))
-    ax_fft_filtfilt.set_title('FFT Signal filtfilt')
+    ax_fft_filtfilt.set_title('FFT Signal w/ notch and bandpass filter')
     plt.grid()
 
-    y = fft(butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
-    x = np.linspace(0.0,100,N//2)
-    ax_fft_allFilters.plot(x , 2.0/N * np.abs(y[0:N//2]))
-    ax_fft_allFilters.set_title('FFT Signal completely filtered?')
-    plt.grid()
-    
-    y = sfp.ifft(y)
+    y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
     f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
-    print("f = ",f)
-    print("Pxx = ",Pxx)
+    #print("f = ",f)
+    #print("Pxx = ",Pxx)
+    #print(len(f))
 
     plt.figure(num=2)
-    plt.xlim([0, 50])
-    plt.plot(f,Pxx)
+    #plt.xlim([0, 50])
+    plt.plot(f,Pxx) #močnostni diagram
     plt.xlabel('frequency [Hz]')
     plt.ylabel('PSD [V**2/Hz]')
     plt.show()

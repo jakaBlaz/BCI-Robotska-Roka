@@ -9,6 +9,7 @@ import numpy as np
 from pylsl import StreamInlet, resolve_stream
 import scipy.fftpack as sfp
 from scipy.fft import fft
+import scipy.signal as signal
 import datetime as dt
 
 ### Nastavitve analize signala ###
@@ -20,20 +21,20 @@ N = 600
 T = 1.0 / 800.0
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
-signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
+#signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 
 #style.use('fivethirtyeight')
 
 # Create figure for plotting
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
 xs = []
 ys = []
 
 # This function is called periodically from FuncAnimation
 def animate(i, xs, ys):
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
 
     # Add x and y to lists
     sample1, timestamp = inlet1.pull_sample()
@@ -88,10 +89,19 @@ elif option.strip() == "txt":
     plt.show()
 
 elif option.strip() == "test":
+
+    f0 = 50.0  # Frequency to be removed from signal (Hz)
+    Q = 30.0  # Quality factor
+    w0 = f0/(Fs/2)  # Normalized Frequency
+    # Design notch filter
+    b, a = signal.iirnotch(w0, Q)
+    zi = signal.lfilter_zi(b, a)
+    
+
     podatki,knjiznica = bci.importData("txt")
     podatki = knjiznica["EXG Channel 0"]
     print(podatki.size)
-    fig, (ax_orig, ax_fft) = plt.subplots(2, 1)
+    fig, (ax_orig, ax_fft,ax_fft_filtered_once,ax_fft_filtered_twice,ax_fft_filtfilt) = plt.subplots(5, 1)
     N = podatki.size
     T = 1.0 / Fs
     x = np.linspace(0.0,N,N)
@@ -99,9 +109,24 @@ elif option.strip() == "test":
     ax_orig.set_title('Original Signal')
 
     y = fft(podatki)
-    x = np.linspace(0.0,1.0/(2.0*T),N//2)
+    print(y)
+    x = np.linspace(0.0,100,N//2)
     ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
     ax_fft.set_title('FFT Signal?')
+    
+    xn = podatki
+
+    z, zi2 = signal.lfilter(b, a, xn, zi=zi)
+    z2, zi3 = signal.lfilter(b, a, z, zi=zi2)
+    y = signal.filtfilt(b, a, xn)
+    x = np.linspace(0.0,100,N)
+    print(z)
+    ax_fft_filtered_once.plot(x , fft(z))
+    ax_fft_filtered_once.set_title('FFT Signal filtered once')
+    ax_fft_filtered_twice.plot(x , fft(z2))
+    ax_fft_filtered_twice.set_title('FFT Signal filtered twice')
+    ax_fft_filtfilt.plot(x , fft(y))
+    ax_fft_filtfilt.set_title('FFT Signal filtfilt')
     plt.grid()
     plt.show()
 

@@ -55,6 +55,17 @@ def animate(i, xs, ys):
     plt.title('EMG over time')
     plt.ylabel('EMG signal')
 
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = signal.butter(order, [low, high], btype='band')
+    return b, a
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = signal.lfilter(b, a, data)
+    return y
 
 option = input("Read .txt file or start streaming from OpenBCI-GUI? Type 'txt' or 'stream' >> ")
 if option.strip() == "stream":
@@ -89,6 +100,11 @@ elif option.strip() == "txt":
     plt.show()
 
 elif option.strip() == "test":
+    
+    # Sample rate and desired cutoff frequencies (in Hz).
+    fs = Fs
+    lowcut = 1
+    highcut = 50
 
     f0 = 50.0  # Frequency to be removed from signal (Hz)
     Q = 30.0  # Quality factor
@@ -101,7 +117,7 @@ elif option.strip() == "test":
     podatki,knjiznica = bci.importData("txt")
     podatki = knjiznica["EXG Channel 0"]
     print(podatki.size)
-    fig, (ax_orig, ax_fft,ax_fft_filtered_once,ax_fft_filtered_twice,ax_fft_filtfilt) = plt.subplots(5, 1)
+    fig, (ax_orig, ax_fft,ax_fft_filtfilt,ax_fft_allFilters) = plt.subplots(4, 1)
     N = podatki.size
     T = 1.0 / Fs
     x = np.linspace(0.0,N,N)
@@ -116,18 +132,18 @@ elif option.strip() == "test":
     
     xn = podatki
 
-    z, zi2 = signal.lfilter(b, a, xn, zi=zi)
-    z2, zi3 = signal.lfilter(b, a, z, zi=zi2)
-    y = signal.filtfilt(b, a, xn)
-    x = np.linspace(0.0,100,N)
-    print(z)
-    ax_fft_filtered_once.plot(x , fft(z))
-    ax_fft_filtered_once.set_title('FFT Signal filtered once')
-    ax_fft_filtered_twice.plot(x , fft(z2))
-    ax_fft_filtered_twice.set_title('FFT Signal filtered twice')
-    ax_fft_filtfilt.plot(x , fft(y))
+    y = fft(signal.filtfilt(b, a, xn))
+    x = np.linspace(0.0,100,N//2)
+    ax_fft_filtfilt.plot(x , 2.0/N * np.abs(y[0:N//2]))
     ax_fft_filtfilt.set_title('FFT Signal filtfilt')
     plt.grid()
+
+    y = (butter_bandpass_filter(x, lowcut, highcut, fs, order=6))
+    x = np.linspace(0.0,100,N//2)
+    ax_fft_allFilters.plot(x , 2.0/N * np.abs(y[0:N//2]))
+    ax_fft_allFilters.set_title('FFT Signal completely filtered?')
+    plt.grid()
+
     plt.show()
 
 

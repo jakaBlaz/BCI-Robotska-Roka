@@ -37,21 +37,22 @@ def serial_ports():
 
     return result[int(port)]
 
-print("Please choose from one of available ports:")
-port = serial_ports()
-print (port)
+def initializeServo():
+    print("Please choose from one of available ports:")
+    port = serial_ports()
+    print (port)
+    ser = serial.Serial(port,9600)  # open serial port on COM7
+    return ser
 
-
-ser = serial.Serial(port,9600)  # open serial port on COM7
-while True:
-    try:
-        kot = (input("Vnesi cifro med 0-255: "))
-        kot = kot.encode(encoding='ascii',errors='strict')
-
-        ser.write(kot)
-        ser.flush()
-        preverjanje = ser.readline()
-        print(preverjanje)
-    except KeyboardInterrupt:
-        ser.close()
-        exit()
+def sendData(data,ser):
+    kot = data
+    kot = kot.encode(encoding='ascii',errors='strict')
+    ser.write(kot)
+    ser.flush()
+    preverjanje = ser.readline()
+    preverjanje = preverjanje.decode()
+    print(preverjanje)
+    if(int(preverjanje) == int(data)):
+        return preverjanje, True
+    else:
+        return preverjanje , False

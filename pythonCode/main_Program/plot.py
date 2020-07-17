@@ -12,19 +12,6 @@ from scipy.fft import fft
 import scipy.signal as signal
 import datetime as dt
 
-### Nastavitve analize signala ###
-EMG_meja = 50 # uV
-Fs = 200 #Sample rate
-# Number of sample points
-N = 600
-# sample spacing
-T = 1.0 / 800.0
-toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
-i = 0 # iterator za posodabljanje vzorcev v vektorju signal
-#signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
-flag = False # flag to notify when vector signal is filled with samples
-previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
-
 #style.use('fivethirtyeight')
 
 # Create figure for plotting
@@ -67,7 +54,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = signal.lfilter(b, a, data)
     return y
 
-def plotFromTxt(Fs,low,high,Q):
+def plotFromTxt(Fs,low,high,Q, N_min,N_max):
     # Sample rate and desired cutoff frequencies (in Hz).
     fs = Fs
     lowcut = low
@@ -83,9 +70,11 @@ def plotFromTxt(Fs,low,high,Q):
     #Import data
     podatki,knjiznica = bci.importData("txt")
     podatki = knjiznica["EXG Channel 0"]
+    podatki = podatki [N_min:N_max]
+    print(podatki)
 
     #Initialize plot diagram
-    plt.xkcd()
+    #plt.xkcd()
     fig, (ax_orig, ax_fft,ax_fft_bandpassFilters,ax_fft_filtfilt) = plt.subplots(4, 1)
     N = podatki.size
     T = 1.0 / Fs
@@ -126,7 +115,7 @@ def plotFromTxt(Fs,low,high,Q):
     #print("Pxx = ",Pxx)
     #print(len(f))
 
-    plt.xkcd()
+    #plt.xkcd()
     plt.figure(num=2)
     #plt.xlim([0, 50])
     plt.plot(f,Pxx) #močnostni diagram

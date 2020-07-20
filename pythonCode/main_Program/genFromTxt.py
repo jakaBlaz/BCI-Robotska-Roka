@@ -1,7 +1,6 @@
 import bisijao as bci
 import plot
 import sendToArduino as roka
-
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
 Fs = 200 #Sample rate
@@ -15,7 +14,18 @@ flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 
 #Acquire data
-signal,signal_fft = plot.plotFromTxt(200,1.0,50.0,35.0,0,N)
+moc = []
+N_min = 0
+N_max = N
+podatki,knjiznica = bci.importData("txt")
+
+for i in range(int(576178/N)):
+    moc.append(plot.PowerFromTxt(200,1.0,50.0,35.0,N_min,N_max,knjiznica))
+    N_min = N_max
+    N_max = N_max + N
+
+for x in moc:
+    print(x)
 exit()
 #send data
 serial = roka.initializeServo()

@@ -54,7 +54,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = signal.lfilter(b, a, data)
     return y
 
-def plotFromTxt(Fs,low,high,Q, N_min,N_max):
+def plotGraphFromTxt(Fs,low,high,Q, N_min,N_max):
     # Sample rate and desired cutoff frequencies (in Hz).
     fs = Fs
     lowcut = low
@@ -71,7 +71,7 @@ def plotFromTxt(Fs,low,high,Q, N_min,N_max):
     podatki,knjiznica = bci.importData("txt")
     podatki = knjiznica["EXG Channel 0"]
     podatki = podatki [N_min:N_max]
-    print(podatki)
+    #print(podatki)
 
     #Initialize plot diagram
     #plt.xkcd()
@@ -122,4 +122,42 @@ def plotFromTxt(Fs,low,high,Q, N_min,N_max):
     plt.xlabel('frequency [Hz]')
     plt.ylabel('PSD [V**2/Hz]')
     plt.show()
-    return y,y_fft
+    return y,f,Pxx
+
+def PowerFromTxt(Fs,low,high,Q, N_min,N_max,knjiznica):
+        # Sample rate and desired cutoff frequencies (in Hz).
+    fs = Fs
+    lowcut = low
+    highcut = high
+
+    
+    f0 = 50.0  # Frequency to be removed from signal (Hz)
+    Q = Q  # Quality factor
+    w0 = f0/(Fs/2)  # Normalized Frequency
+    # Design notch filter
+    b, a = signal.iirnotch(w0, Q)
+    zi = signal.lfilter_zi(b, a)
+    
+    #Prepare data
+    podatki = knjiznica["EXG Channel 0"]
+    #print(podatki.size)
+    podatki = podatki [N_min:N_max]
+    xn = podatki
+    
+    #print(podatki)
+
+    #Initialize plot diagram
+    #plt.xkcd()
+    T = 1.0 / Fs
+    #Notch filter da se znebiš 50Hz motnje (ki jo dobiš iz omrežne frekvence/napetosti/elektrike)
+    y = fft(signal.filtfilt(b, a, xn))
+    y = fft(butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
+
+    y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
+    f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
+
+    #Gledanje vsote vrednosti v za nas zanimivem območju
+    zanimivo_obmocje = int((f.size/2)*0.2)
+    moc = np.sum(Pxx[0:zanimivo_obmocje]) / podatki.size
+
+    return moc

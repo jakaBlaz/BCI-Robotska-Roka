@@ -68,7 +68,7 @@ while True:
     moc = np.sum(Pxx[0:zanimivo_obmocje]) / N
     print(moc)
     if moc > 100.0:
-        kot = "100"
+        kot = "20" 
         kot = kot.encode(encoding='ascii',errors='strict')
         serial.write(kot)
         serial.flush()
@@ -77,7 +77,7 @@ while True:
         #print(preverjanje)
     
     else:
-        kot = "200"
+        kot = "120"
         kot = kot.encode(encoding='ascii',errors='strict')
         serial.write(kot)
         serial.flush()    

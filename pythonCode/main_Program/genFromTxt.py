@@ -1,6 +1,7 @@
 import bisijao as bci
 import plot
 import sendToArduino as roka
+import time
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
 Fs = 200 #Sample rate
@@ -13,22 +14,27 @@ i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
 
+#initialize Serial connection
+serial = roka.initializeServo()
+
 #Acquire data
-moc = []
+matrika = []
 N_min = 0
 N_max = N
 podatki,knjiznica = bci.importData("txt")
-
-for i in range(int(576178/N)):
-    moc.append(plot.PowerFromTxt(200,1.0,50.0,35.0,N_min,N_max,knjiznica))
+size = knjiznica["EXG Channel 0"].size
+for i in range(int(size/N)):
+    moc = (plot.PowerFromTxt(200,1.0,50.0,35.0,N_min,N_max,knjiznica))
     N_min = N_max
     N_max = N_max + N
-
-for x in moc:
-    print(x)
-exit()
-#send data
-serial = roka.initializeServo()
-vrnjeno, uspesno = roka.sendData("125",serial)
-print(uspesno)
-serial.close()
+    matrika.append(moc)
+    if(moc < 5.0):
+        roka.sendData("120,120,120,120,120",serial)
+        print("relax")
+    elif moc<30.0:
+        roka.sendData("60,60,60,60,60",serial)
+        print("medium")
+    else:
+        roka.sendData("40,30,30,30,30",serial)
+        print("contracted")
+    time.sleep(5)

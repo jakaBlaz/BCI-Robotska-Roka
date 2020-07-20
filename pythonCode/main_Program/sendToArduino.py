@@ -44,15 +44,8 @@ def initializeServo():
     ser = serial.Serial(port,9600)  # open serial port on COM7
     return ser
 
-def sendData(data,ser):
-    kot = data
+def sendData(angle,ser): 
+    kot = angle
     kot = kot.encode(encoding='ascii',errors='strict')
     ser.write(kot)
     ser.flush()
-    preverjanje = ser.readline()
-    preverjanje = preverjanje.decode()
-    print(preverjanje)
-    if(int(preverjanje) == int(data)):
-        return preverjanje, True
-    else:
-        return preverjanje , False

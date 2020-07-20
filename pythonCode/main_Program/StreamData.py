@@ -8,12 +8,17 @@ import time
 
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
+fs = 200 #Sample rate v herzih (Ganglion je preko BLE vmesnika omejen na 200Hz)
 N = 200 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
+lowcut = 1 # V
+highcut = 50 # Frekvenčno območje med katerim filter prepušča signal
+f0 = 50 #Frequency to be removed from signal (Hz) with notch filter
+Q = 35 #Quality factor
 ##################################
 #print(plt.style.available)
 ##plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
@@ -42,12 +47,18 @@ start = time.time()
 while True:
     # get a new sample (you can also omit the timestamp part if you're not
     # interested in it)
+    start = time.time()
     while i<N:
         sample1, timestamp = inlet1.pull_sample()
         data.append(sample1[1])
         i = i+1
     #sample2, timestamp = inlet2.pull_sample()
+    y = bci.butter_bandpass_filter(data, lowcut, highcut, fs, order=6)
+    y = bci.notch_filter()
+    f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
     i = 0
-
-    print(data)  # sproti po 1 vzorec
-    #time.sleep(1)
+    zanimivo_obmocje = int((f.size/2)*0.2)
+    moc = np.sum(Pxx[0:zanimivo_obmocje]) / podatki.size
+    print(moc)
+    print(start - time.time())
+    time.sleep(1)

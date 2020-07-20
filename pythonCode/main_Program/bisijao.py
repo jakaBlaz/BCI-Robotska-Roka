@@ -3,6 +3,10 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import csv
 
+import scipy.fftpack as sfp
+from scipy.fft import fft
+import scipy.signal as signal
+
 def popcol(my_array,pc):
     """ column popping in numpy arrays
     Input: my_array: NumPy array, pc: column index to pop out
@@ -84,4 +88,25 @@ def analyze_EMG(signal, meja, toleranca, previousBOOL):
         else:
             return False
 
+#Filters
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = signal.butter(order, [low, high], btype='band')
+    return b, a
 
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = signal.lfilter(b, a, data)
+    return y
+
+def notch_filter(data,f0,Q,Fs):
+    # f0 = Frequency to be removed from signal (Hz)
+    # Q = Quality factor
+    w0 = f0/(Fs/2)  # Normalized Frequency
+    # Design notch filter
+    b, a = signal.iirnotch(w0, Q)
+    zi = signal.lfilter_zi(b, a)
+    y = signal.filtfilt(b, a, data)
+    return y

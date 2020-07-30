@@ -1,6 +1,6 @@
 #to je glavna skripta
 import bisijao as bci
-import sendToArduino as arduino
+import sendToArduino as roka
 import numpy as np
 import matplotlib.pyplot as plt
 from pylsl import StreamInlet, resolve_stream
@@ -12,7 +12,7 @@ import serial
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
 fs = 200 #Sample rate v herzih (Ganglion je preko BLE vmesnika omejen na 200Hz)
-N = 200 # Sample size
+N = 200*5 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 #signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
@@ -47,7 +47,7 @@ inlet1 = StreamInlet(stream1[0])
 
 i = 0
 
-serial = arduino.initializeServo()
+serial = roka.initializeServo()
 
 while True:
     data = []
@@ -68,21 +68,19 @@ while True:
     moc = np.sum(Pxx[0:zanimivo_obmocje]) / N
     print(moc)
     if moc > 100.0:
-        kot = "20" 
-        kot = kot.encode(encoding='ascii',errors='strict')
-        serial.write(kot)
-        serial.flush()
+        print("contracted")
+        roka.sendData("40,30,30,30,30",serial)
         #preverjanje = serial.readline()
-        #preverjanje = preverjanje.decode()
+        
+        #preverjanje = preverjanje.decode()0
+
         #print(preverjanje)
     
     else:
-        kot = "120"
-        kot = kot.encode(encoding='ascii',errors='strict')
-        serial.write(kot)
-        serial.flush()    
+        roka.sendData("120,120,120,120,120",serial)
+        print("relax")
         #preverjanje = serial.readline()
         #preverjanje = preverjanje.decode()
         #print(preverjanje)
-    print(time.time()-start)
+    #print(time.time()-start)
     time.sleep(1)

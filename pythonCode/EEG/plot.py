@@ -144,11 +144,13 @@ pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
 pow_orig.set_title('Whole periodogram')
 pow_orig.grid()
 
-pow_gamma.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+gFreq,gPow = bci.find_band(f,Pxx, FrequencyBand='gamma')
+pow_gamma.plot(gFreq,gPow)
 pow_gamma.set_title('Gama power')
 pow_gamma.grid()
 
-pow_beta.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+bFreq,bPow = bci.find_band(f,Pxx, FrequencyBand='gamma')
+pow_beta.plot(bFreq,bPow)
 pow_beta.set_title('Beta power')
 pow_beta.grid()
 

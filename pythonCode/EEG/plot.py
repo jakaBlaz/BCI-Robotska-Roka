@@ -136,8 +136,8 @@ y_fft = y
 y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
 f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 
-print(max(f))
-print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
+# print(max(f))
+# print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
 #graph power
 fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
 pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
@@ -178,3 +178,27 @@ plt.ylabel('PSD [V**2/Hz]')
 plt.grid()
 
 '''
+
+# Testing bci.find_band()
+
+delta, dPx = bci.find_band(f, Pxx, 'delta')
+theta, tPx = bci.find_band(f, Pxx, 'theta')
+alpha, aPx = bci.find_band(f, Pxx, 'alpha')
+beta, bPx = bci.find_band(f, Pxx, 'beta')
+gamma, gPx = bci.find_band(f, Pxx, 'gamma')
+
+print(f'delta >> {delta[0]} - {delta[-1]} Hz')
+print(f'theta >> {theta[0]} - {theta[-1]} Hz')
+print(f'alpha >> {alpha[0]} - {alpha[-1]} Hz')
+print(f'beta >> {beta[0]} - {beta[-1]} Hz')
+print(f'gamma >> {gamma[0]} - {gamma[-1]} Hz')
+
+plt.xkcd()
+fig, axes = plt.subplots(nrows=5, ncols=1)
+fig.tight_layout() # Or equivalently,  
+plt.subplot(5, 1, 1); plt.plot(delta, dPx); plt.title('delta')
+plt.subplot(5, 1, 2); plt.plot(theta, tPx); plt.title('theta')
+plt.subplot(513); plt.plot(alpha, aPx); plt.title('alpha')
+plt.subplot(514); plt.plot(beta, bPx); plt.title('beta')
+plt.subplot(515); plt.plot(gamma, gPx); plt.title('gamma')
+plt.show()

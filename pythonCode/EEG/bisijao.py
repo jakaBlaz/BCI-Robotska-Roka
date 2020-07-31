@@ -128,36 +128,40 @@ def find_band(iFreq, iPxx, FrequencyBand='alpha'):
         oFreq: periodogram x-axis for chosen frequency band, only positive frequency
         oPx: periodogram y-axis, only positive frequency
     '''
-    l = len(iFreq) / 2 # vzamem samo pozitivne frekvence
+    l = int(np.floor(len(iFreq) / 2)) # vzamem samo pozitivne frekvence
     freq = iFreq[0:l]
     Px = iPxx[0:l]
+    fmax = freq[-1]
 
     # določim lo in hi - spodnjo in zgornji frekvenčno mejo izbranega pasu
     if FrequencyBand == 'delta':
-        lo = 0.5
-        hi = 4.0
+        lowcut = 0.5
+        highcut = 4.0
     elif FrequencyBand == 'theta':
-        lo = 4.1
-        hi = 8.0
+        lowcut = 4.1
+        highcut = 8.0
     elif FrequencyBand == 'alpha':
-        lo = 8.1
-        hi = 13.0
+        lowcut = 8.1
+        highcut = 13.0
     elif FrequencyBand == 'beta':
-        lo = 13.1
-        hi = 32.0
+        lowcut = 13.1
+        highcut = 32.0
     elif FrequencyBand == 'gamma':
-        lo = 32.1
-        hi = 100.0
+        lowcut = 32.1
+        highcut = fmax
     else:
-        raise ValueError('This frequency band doesn\'t exist. Choose between \'delta\', \'theta\', \'alpha\', \'beta\' or \'gamma\'.)    
+        raise ValueError("This frequency band doesn't exist. Choose between 'delta', 'theta', 'alpha', 'beta' or 'gamma'.")    
 
-    # poiščem dejansko vrednost lo in hi v seznamu frekvenc 'freq'
-    flo = find_nearest(freq, lo) 
-    fhi = find_nearest(freq, hi)
+    # poiščem dejansko vrednost lowcut in highcut v seznamu frekvenc 'freq'
+    #flowcut = find_nearest(freq, lowcut) 
+    #fhighcut = find_nearest(freq, highcut)
 
+    # najdem na katerih indeksih se nahajata frekvenčni meji
+    idx1, = np.where(np.isclose(freq, lowcut))[0] # floating-point search by epsilon
+    idx2, = np.where(np.isclose(freq, highcut))[0]
     
-    
+    # Izrežem frekvenčni pas
+    oFreq = freq[idx1:idx2]
+    oPx = Px[idx1:idx2]
 
     return oFreq, oPx
-
-a, b = find_band()

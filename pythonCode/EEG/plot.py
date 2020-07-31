@@ -4,8 +4,6 @@ from matplotlib import style
 
 import csv
 
-import sys
-print(sys.platform)
 import bisijao as bci
 import numpy as np
 from pylsl import StreamInlet, resolve_stream
@@ -62,7 +60,7 @@ highcut = 60
 podatki,knjiznica = bci.importData("txt")
 podatki = knjiznica["EXG Channel 0"]
 #print(podatki)
-#podatki = podatki [8000:16000]
+podatki = podatki [8000:16000]
 
 #Initialize plot diagram
 plt.xkcd()
@@ -138,6 +136,8 @@ y_fft = y
 y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
 f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 
+print(max(f))
+print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
 #graph power
 fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
 pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
@@ -159,13 +159,13 @@ pow_alpha.grid()
 pow_theta.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
 pow_theta.set_title('Theta power')
 pow_theta.grid()
-
+'''
 plt.figure(num=3)
 f, t, Sxx = signal.spectrogram(y_fft, fs)
 plt.pcolormesh(t, f, Sxx)
 plt.ylabel('Frequency [Hz]')
 plt.xlabel('Time [sec]')
-plt.show()
+plt.show()'''
 '''
 #print("f = ",f)
 #print("Pxx = ",Pxx)

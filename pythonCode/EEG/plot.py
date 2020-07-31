@@ -53,17 +53,18 @@ w0 = f0/(Fs/2)  # Normalized Frequency
 b, a = signal.iirnotch(w0, Q)
 zi = signal.lfilter_zi(b, a)
 #initial bandpass filter
-lowcut = 1
+lowcut = 4
 highcut = 60
 
 #Import data
 podatki,knjiznica = bci.importData("txt")
 podatki = knjiznica["EXG Channel 0"]
 #print(podatki)
+podatki = podatki [8000:16000]
 
 #Initialize plot diagram
 #plt.xkcd()
-fig, (ax_fft,ax_gamma,ax_beta,ax_alpha,ax_theta) = plt.subplots(5, 1)
+fig, (ax_orig,ax_fft,ax_gamma,ax_beta,ax_alpha,ax_theta) = plt.subplots(6, 1)
 N = podatki.size
 T = 1.0 / Fs
 
@@ -74,9 +75,13 @@ y = fft(bci.butter_bandpass_filter(sfp.ifft(y), lowcut, highcut, fs, order=6))
 
 x = np.linspace(0.0,100,N//2)
 ax_fft.plot(x, 2.0/N * np.abs(y[0:N//2]))
-ax_fft.set_title('FFT Signal (not filtered)')
+ax_fft.set_title('FFT Signal')
 ax_fft.grid()
 ax_fft.set_xlim([-2, 60])
+
+x = np.linspace(0.0,N,N)
+ax_orig.plot(x,sfp.ifft(y))
+ax_orig.set_title('Original Signal')
 
 #Gamma brain waves
 lowcut = 32
@@ -133,11 +138,14 @@ f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 #print("f = ",f)
 #print("Pxx = ",Pxx)
 #print(len(f))
-
+print(f)
+print(len(f))
+print(max(f))
 #plt.xkcd()
 plt.figure(num=2)
 #plt.xlim([0, 50])
-plt.plot(f,Pxx) #močnostni diagram
+plt.plot(f[3000:4000],Pxx[3000:4000]) #močnostni diagram
 plt.xlabel('frequency [Hz]')
 plt.ylabel('PSD [V**2/Hz]')
+plt.grid()
 plt.show()

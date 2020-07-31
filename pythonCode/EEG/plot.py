@@ -4,6 +4,8 @@ from matplotlib import style
 
 import csv
 
+import sys
+print(sys.platform)
 import bisijao as bci
 import numpy as np
 from pylsl import StreamInlet, resolve_stream
@@ -60,10 +62,10 @@ highcut = 60
 podatki,knjiznica = bci.importData("txt")
 podatki = knjiznica["EXG Channel 0"]
 #print(podatki)
-podatki = podatki [8000:16000]
+#podatki = podatki [8000:16000]
 
 #Initialize plot diagram
-#plt.xkcd()
+plt.xkcd()
 fig, (ax_orig,ax_fft,ax_gamma,ax_beta,ax_alpha,ax_theta) = plt.subplots(6, 1)
 N = podatki.size
 T = 1.0 / Fs
@@ -135,9 +137,38 @@ ax_theta.set_xlim([-2, 60])
 y_fft = y
 y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
 f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
+
+#graph power
+fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
+pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+pow_orig.set_title('Whole periodogram')
+pow_orig.grid()
+
+pow_gamma.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+pow_gamma.set_title('Gama power')
+pow_gamma.grid()
+
+pow_beta.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+pow_beta.set_title('Beta power')
+pow_beta.grid()
+
+pow_alpha.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+pow_alpha.set_title('Alpha power')
+pow_alpha.grid()
+
+pow_theta.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+pow_theta.set_title('Theta power')
+pow_theta.grid()
+
+plt.figure(num=3)
+f, t, Sxx = signal.spectrogram(y_fft, fs)
+plt.pcolormesh(t, f, Sxx)
+plt.ylabel('Frequency [Hz]')
+plt.xlabel('Time [sec]')
+plt.show()
+'''
 #print("f = ",f)
 #print("Pxx = ",Pxx)
-#print(len(f))
 #plt.xkcd()
 plt.figure(num=2)
 #plt.xlim([0, 50])
@@ -145,4 +176,5 @@ plt.plot(f,Pxx) #močnostni diagram
 plt.xlabel('frequency [Hz]')
 plt.ylabel('PSD [V**2/Hz]')
 plt.grid()
-plt.show()
+
+'''

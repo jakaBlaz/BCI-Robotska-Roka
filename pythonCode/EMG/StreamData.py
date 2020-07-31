@@ -12,7 +12,7 @@ import serial
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
 fs = 200 #Sample rate v herzih (Ganglion je preko BLE vmesnika omejen na 200Hz)
-N = 200*5 # Sample size
+N = 200 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 #signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
@@ -47,7 +47,7 @@ inlet1 = StreamInlet(stream1[0])
 
 i = 0
 
-serial = roka.initializeServo()
+#serial = roka.initializeServo()
 
 while True:
     data = []
@@ -56,7 +56,7 @@ while True:
     start = time.time()
     while i<N:
         sample1, timestamp = inlet1.pull_sample()
-        data.append(sample1[1])
+        data.append(sample1[0])
         i = i+1
     #sample2, timestamp = inlet2.pull_sample()
 
@@ -69,7 +69,7 @@ while True:
     print(moc)
     if moc > 100.0:
         print("contracted")
-        roka.sendData("40,30,30,30,30",serial)
+        #roka.sendData("40,30,30,30,30",serial)
         #preverjanje = serial.readline()
         
         #preverjanje = preverjanje.decode()0
@@ -77,7 +77,7 @@ while True:
         #print(preverjanje)
     
     else:
-        roka.sendData("120,120,120,120,120",serial)
+        #roka.sendData("120,120,120,120,120",serial)
         print("relax")
         #preverjanje = serial.readline()
         #preverjanje = preverjanje.decode()

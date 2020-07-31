@@ -5,15 +5,17 @@ import matplotlib.pyplot as plt
 from pylsl import StreamInlet, resolve_stream
 import scipy.fftpack as sfp
 import time
+from math import sqrt as sq
 
 ### Nastavitve analize signala ###
 EMG_meja = 50 # uV
-N = 20 # Sample size
+N = 40 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
 flag = False # flag to notify when vector signal is filled with samples
 previousBOOL = False # na začetku je roka odprta - RMS signala je pod EMG_mejo
+meja = 0 # povprecje, kao meja
 ##################################
 #print(plt.style.available)
 ##plt.style.use('/Users/iripuga/Documents/1.Delo/404/_bci_/BCI-Robotska-Roka/pythonCode/stylelib/bci-style.mplstyle')
@@ -82,12 +84,24 @@ elif option == 'stream':
 
     start = time.time()
     while True:
+        if i == N:
+            i = 0
+            for x in signal:
+                x = np.abs(x)
+                signal[i] = x
+                meja += x
+            meja /= ((i+1) * 100)
+            string = "*" * int(meja)
+            print(string)
+            meja = 0
+            i = 0
         # get a new sample (you can also omit the timestamp part if you're not
         # interested in it)
         sample1, timestamp = inlet1.pull_sample()
         #sample2, timestamp = inlet2.pull_sample()
-
-        print(sample1)  # sproti po 1 vzorec
-        #time.sleep(1)
+        # print(sample1)  # sproti po 1 vzorec
+        # time.sleep(1)
+        signal[i] = sample1[0]
+        i += 1  
 else:
     raise ValueError('Unknown argument "option" in main.py, line 13') 

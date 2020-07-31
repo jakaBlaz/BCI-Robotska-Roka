@@ -179,25 +179,32 @@ plt.grid()
 
 '''
 
-# Testing bci.find_band()
-
+##################### Testing bci.find_band() #####################
+# izračunam pasove
 delta, dPx = bci.find_band(f, Pxx, 'delta')
 theta, tPx = bci.find_band(f, Pxx, 'theta')
 alpha, aPx = bci.find_band(f, Pxx, 'alpha')
 beta, bPx = bci.find_band(f, Pxx, 'beta')
 gamma, gPx = bci.find_band(f, Pxx, 'gamma')
 
-print(f'delta >> {delta[0]} - {delta[-1]} Hz')
-print(f'theta >> {theta[0]} - {theta[-1]} Hz')
-print(f'alpha >> {alpha[0]} - {alpha[-1]} Hz')
-print(f'beta >> {beta[0]} - {beta[-1]} Hz')
-print(f'gamma >> {gamma[0]} - {gamma[-1]} Hz')
+# izračun frekvenčne ločljivosti za posamezne pasove
+dFres = Fs / np.floor(len(delta))
+tFres = Fs / np.floor(len(theta))
+aFres = Fs / np.floor(len(alpha))
+bFres = Fs / np.floor(len(beta))
+gFres = Fs / np.floor(len(gamma))
+
+print(f'\ndelta >> {delta[0]} - {delta[-1]} Hz, df >> {dFres} Hz') # zelo slaba frekvenčna resolucija, rabiva drugače računat periodogram. Večji vzorec izboljša ločljivost.
+print(f'theta >> {theta[0]} - {theta[-1]} Hz, df >> {tFres} Hz')
+print(f'alpha >> {alpha[0]} - {alpha[-1]} Hz, df >> {aFres} Hz')
+print(f'beta >> {beta[0]} - {beta[-1]} Hz, df >> {bFres} Hz')
+print(f'gamma >> {gamma[0]} - {gamma[-1]} Hz, df >> {gFres} Hz')
 
 plt.xkcd()
 fig, axes = plt.subplots(nrows=5, ncols=1)
 fig.tight_layout() # Or equivalently,  
-plt.subplot(5, 1, 1); plt.plot(delta, dPx); plt.title('delta')
-plt.subplot(5, 1, 2); plt.plot(theta, tPx); plt.title('theta')
+plt.subplot(511); plt.plot(delta, dPx); plt.title('delta')
+plt.subplot(512); plt.plot(theta, tPx); plt.title('theta')
 plt.subplot(513); plt.plot(alpha, aPx); plt.title('alpha')
 plt.subplot(514); plt.plot(beta, bPx); plt.title('beta')
 plt.subplot(515); plt.plot(gamma, gPx); plt.title('gamma')

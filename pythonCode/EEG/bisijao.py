@@ -6,6 +6,7 @@ import csv
 import scipy.fftpack as sfp
 from scipy.fft import fft
 import scipy.signal as signal
+from scipy.integrate import simps
 
 def popcol(my_array,pc):
     """ column popping in numpy arrays
@@ -165,3 +166,37 @@ def find_band(iFreq, iPxx, FrequencyBand='alpha'):
     oPx = Px[idx1:idx2]
 
     return oFreq, oPx
+
+def averageP(f, Px, fs):
+    '''
+    Calculate average band power by Simps method.\n
+    In:
+        f...band frequency array
+        Px...periodogram values
+        fs...sampling frequency used with fft and periodogram
+    Out:
+        oP...absolute power of frequency band
+    '''
+    fres = fs / np.floor(len(f)) # izračunam frekvenčno resolucijo periodograma
+    oP = simps(Px, dx=fres) # izračunam površino pod periodogramom po simpsovi formuli
+
+    return oP
+
+def relativeP(band_f, band_Px, full_Pxx, fs):
+    '''
+    Calculate relative band power according to total power.
+    '''
+    N = np.floor(len(Pxx))
+
+    # total power
+    Px = Pxx[0:(N / 2)] # real part of whole periodogram
+    fres = fs / N
+    total_power = simps(Px, dx=fres)
+
+    # band power
+    band_power = averageP(band_f, band_Px, fs)
+
+    # relative power
+    relP = band_power / total_power
+
+    return relP

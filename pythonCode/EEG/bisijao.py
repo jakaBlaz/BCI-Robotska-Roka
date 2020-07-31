@@ -111,9 +111,14 @@ def notch_filter(data,f0,Q,Fs):
     y = signal.filtfilt(b, a, data)
     return y
 
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]
+
 def find_band(iFreq, iPxx, FrequencyBand='alpha'):
     '''
-    Returns only EEG band which you are interested in.
+    Returns only EEG band which you are interested in.\n
     In: 
         iFreq: periodogram x-axis
         iPxx: periodogram y-axis
@@ -124,13 +129,35 @@ def find_band(iFreq, iPxx, FrequencyBand='alpha'):
         oPx: periodogram y-axis, only positive frequency
     '''
     l = len(iFreq) / 2 # vzamem samo pozitivne frekvence
-    f = iFreq[0:l]
+    freq = iFreq[0:l]
     Px = iPxx[0:l]
 
+    # določim lo in hi - spodnjo in zgornji frekvenčno mejo izbranega pasu
+    if FrequencyBand == 'delta':
+        lo = 0.5
+        hi = 4.0
+    elif FrequencyBand == 'theta':
+        lo = 4.1
+        hi = 8.0
+    elif FrequencyBand == 'alpha':
+        lo = 8.1
+        hi = 13.0
+    elif FrequencyBand == 'beta':
+        lo = 13.1
+        hi = 32.0
+    elif FrequencyBand == 'gamma':
+        lo = 32.1
+        hi = 100.0
+    else:
+        raise ValueError('This frequency band doesn\'t exist. Choose between \'delta\', \'theta\', \'alpha\', \'beta\' or \'gamma\'.')    
+
+    # poiščem dejansko vrednost lo in hi v seznamu frekvenc 'freq'
+    flo = find_nearest(freq, lo) 
+    fhi = find_nearest(freq, hi)
+
+    
+    
 
     return oFreq, oPx
 
-def find_nearest(array, value):
-    array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
-    return array[idx]
+a, b = find_band()

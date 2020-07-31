@@ -9,20 +9,15 @@ from pylsl import StreamInlet, resolve_stream
 numStreams = 3
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
-stream1 = resolve_stream('name', 'y')
-#stream2 = resolve_stream('name', 'y')
-#stream3 = resolve_stream('name', 'z')
-print("stream_name1", stream1)
-#print("stream_name2", stream2)
-#print("stream_name3", stream3)
+stream1 = resolve_stream('name', 'obci_eeg1')
+stream2 = resolve_stream('name', 'obci_eeg2')
+stream3 = resolve_stream('name', 'obci_eeg3')
 
 # create a new inlet to read from the stream
 inlet = StreamInlet(stream1[0])
 inlet2 = StreamInlet(stream2[0])
 inlet3 = StreamInlet(stream3[0])
 
-#wait before streaming
-time.sleep(180)
 while True:
     for i in range(numStreams):
         # get a new sample (you can also omit the timestamp part if you're not

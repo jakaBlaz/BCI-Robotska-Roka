@@ -1,6 +1,7 @@
 import numpy as np 
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+import csv
 
 def popcol(my_array,pc):
     """ column popping in numpy arrays
@@ -28,10 +29,20 @@ def importData(option):
         f = open(filename)
 
     #generira numpy array
-    data = np.genfromtxt(filename, delimiter=",", skip_header=6) #prvih 6 vrstic so metapodatki
-        
+    data = np.genfromtxt(filename, delimiter=",", skip_header=5) #prvih 6 vrstic so metapodatki
+    
+    header = csv.DictReader(filter(lambda row: row[0]!='%', f))
+    dictionary = {
+        "test" : "value"
+    }
+    for i in range(len(header.fieldnames)):
+        dictionary[header.fieldnames[i].strip()] = data[:,i]
+
     f.close()
-    return data
+    dictionary.pop("test")
+    dictionary.pop("Timestamp (Formatted)")
+    dictionary.pop("Sample Index")
+    return data,dictionary
 
 def analyze_ACCEL(ax, ay, az):
     '''

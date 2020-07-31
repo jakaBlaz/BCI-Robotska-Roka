@@ -9,8 +9,8 @@ import scipy.fftpack as sfp
 import time
 
 ### Nastavitve analize signala ###
-EMG_meja = 1000 # uV
-N = 20 # Sample size
+EMG_meja = 500 # uV
+N = 200 # Sample size
 toleranca = 0.01 # Med 0 in 1 - določa kakšna odstopanja od EMG_meje spremenijo bool vrednost
 i = 0 # iterator za posodabljanje vzorcev v vektorju signal
 signal = np.zeros(N) # vektor dolžine N, kamor se shranjujejo vzorci 
@@ -94,7 +94,7 @@ elif option == 'stream':
         if i < N:   # signal dolžine N
             #tmp = signal[0:-1]
             #signal[1:] = tmp
-            signal[i] = sample1[0]  # sproti dodajam po 1 vzorec na 1.mesto
+            signal[i] = sample1[1]  # sproti dodajam po 1 vzorec na 1.mesto
             #print(sample1)
             i = i + 1
             if signal[-1] != 0.0 and not flag: # preverjam, kdaj bo vektor "signal" napolnjen z vzorci
@@ -105,6 +105,8 @@ elif option == 'stream':
                 #time.sleep(0.5)
         else:
             i = 0;
+            flag = False
+            start = time.time()
             print(f"RMS na {N} vzorcih meja {EMG_meja} uV >>> ", end="")
             currentBOOL = bci.analyze_EMG(signal, EMG_meja, toleranca, previousBOOL)
             previousBOOL = currentBOOL

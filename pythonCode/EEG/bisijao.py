@@ -124,9 +124,31 @@ def find_band(iFreq, iPxx, FrequencyBand='alpha'):
         oPx: periodogram y-axis, only positive frequency
     '''
     l = len(iFreq) / 2 # vzamem samo pozitivne frekvence
-    f = iFreq[0:l]
+    freq = iFreq[0:l]
     Px = iPxx[0:l]
 
+    # določim lo in hi - spodnjo in zgornji frekvenčno mejo pasu
+    if FrequencyBand == 'delta':
+        lo = 0.5
+        hi = 4.0
+    elif FrequencyBand == 'theta':
+        lo = 4.1
+        hi = 8.0
+    elif FrequencyBand == 'alpha':
+        lo = 8.1
+        hi = 13.0
+    elif FrequencyBand == 'beta':
+        lo = 13.1
+        hi = 32.0
+    elif FrequencyBand == 'gamma':
+        lo = 32.1
+        hi = 100.0
+    else:
+        raise ValueError('This frequency band doesn\'t exist. Choose between \'delta\', \'theta\', \'alpha\', \'beta\' or \'gamma\'.)    
+
+    # poiščem lo in hi v seznamu frekvenc 'freq'
+    
+    
 
     return oFreq, oPx
 

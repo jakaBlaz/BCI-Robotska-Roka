@@ -110,3 +110,24 @@ def notch_filter(data,f0,Q,Fs):
     zi = signal.lfilter_zi(b, a)
     y = signal.filtfilt(b, a, data)
     return y
+
+def find_band(iFreq, iPxx, FrequencyBand='alpha'):
+    '''
+    Returns only EEG band which you are interested in.
+    In: 
+        iFreq: periodogram x-axis
+        iPxx: periodogram y-axis
+        FrequencyBand: string to choose which EEG frequency band you want to get from signal, 
+              options are 'alpha', 'beta', 'gamma', 'delta' or 'theta'
+    Out: 
+        oFreq: periodogram x-axis for chosen frequency band, only positive frequency
+        oPx: periodogram y-axis, only positive frequency
+    '''
+    l = len(iFreq) / 2 # vzamem samo pozitivne frekvence
+    f = iFreq[0:l]
+    Px = iPxx[0:l]
+
+
+    return oFreq, oPx
+
+

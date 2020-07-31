@@ -2,7 +2,6 @@ import numpy as np
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import csv
-from __future__ import division
 
 import scipy.fftpack as sfp
 from scipy.fft import fft
@@ -111,59 +110,3 @@ def notch_filter(data,f0,Q,Fs):
     zi = signal.lfilter_zi(b, a)
     y = signal.filtfilt(b, a, data)
     return y
-
-def bandpass_filter(low,high,transition,fs,s):
-    fL = low/fs  # Cutoff frequency as a fraction of the sampling rate (in (0, 0.5)).
-    fH = high/fs  # Cutoff frequency as a fraction of the sampling rate (in (0, 0.5)).
-    b = transition/fs  # Transition band, as a fraction of the sampling rate (in (0, 0.5)).
-    N = int(np.ceil((4 / b)))
-    if not N % 2: N += 1  # Make sure that N is odd.
-    n = np.arange(N)
-    
-    # Compute a low-pass filter with cutoff frequency fH.
-    hlpf = np.sinc(2 * fH * (n - (N - 1) / 2))
-    hlpf *= np.blackman(N)
-    hlpf = hlpf / np.sum(hlpf)
-    
-    # Compute a high-pass filter with cutoff frequency fL.
-    hhpf = np.sinc(2 * fL * (n - (N - 1) / 2))
-    hhpf *= np.blackman(N)
-    hhpf = hhpf / np.sum(hhpf)
-    hhpf = -hhpf
-    hhpf[(N - 1) // 2] += 1
-    
-    # Convolve both filters.
-    h = np.convolve(hlpf, hhpf)
-
-    #apply filter to signal
-    s = np.convolve(s, h)
-    return s
-
-
-def bandreject_filter(low,high,transition,fs,s):
-    fL = low/fs  # Cutoff frequency as a fraction of the sampling rate (in (0, 0.5)).
-    fH = high/fs  # Cutoff frequency as a fraction of the sampling rate (in (0, 0.5)).
-    b = transition/fs  # Transition band, as a fraction of the sampling rate (in (0, 0.5)).
-    N = int(np.ceil((4 / b)))
-    if not N % 2: N += 1  # Make sure that N is odd.
-    n = np.arange(N)
-    
-    # Compute a low-pass filter with cutoff frequency fL.
-    hlpf = np.sinc(2 * fL * (n - (N - 1) / 2))
-    hlpf *= np.blackman(N)
-    hlpf /= np.sum(hlpf)
-    
-    # Compute a high-pass filter with cutoff frequency fH.
-    hhpf = np.sinc(2 * fH * (n - (N - 1) / 2))
-    hhpf *= np.blackman(N)
-    hhpf /= np.sum(hhpf)
-    hhpf = -hhpf
-    hhpf[(N - 1) // 2] += 1
-    
-    # Add both filters.
-    h = hlpf + hhpf
-
-    #apply filter to signal
-    s = np.convolve(s, h)
-
-    return s

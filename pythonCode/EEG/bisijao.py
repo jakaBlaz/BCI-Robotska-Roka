@@ -185,11 +185,18 @@ def averageP(f, Px, fs):
 def relativeP(band_f, band_Px, full_Pxx, fs):
     '''
     Calculate relative band power according to total power.
+    In:
+        band_f...chosen frequency band
+        band_Px...real part of bands periodogram
+        full_Pxx...the whole thing
+        fs...sampling frequency 
+    Out:
+        relP...relative power for band_f (0.0 - 1.0), normalized
     '''
-    N = np.floor(len(Pxx))
+    N = np.floor(len(full_Pxx))
 
     # total power
-    Px = Pxx[0:(N / 2)] # real part of whole periodogram
+    Px = full_Pxx[0:int(N / 2)] # real part of whole periodogram
     fres = fs / N
     total_power = simps(Px, dx=fres)
 

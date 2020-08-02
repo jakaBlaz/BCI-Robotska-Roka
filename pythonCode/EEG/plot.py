@@ -63,7 +63,7 @@ podatki = knjiznica["EXG Channel 0"]
 podatki = podatki [8000:16000]
 
 #Initialize plot diagram
-plt.xkcd()
+#plt.xkcd()
 fig, (ax_orig,ax_fft,ax_gamma,ax_beta,ax_alpha,ax_theta) = plt.subplots(6, 1)
 N = podatki.size
 T = 1.0 / Fs
@@ -136,8 +136,8 @@ y_fft = y
 y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
 f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 
-print(max(f))
-print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
+# print(max(f))
+# print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
 #graph power
 fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
 pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
@@ -180,3 +180,52 @@ plt.ylabel('PSD [V**2/Hz]')
 plt.grid()
 
 '''
+
+##################### Testing bci.find_band() #####################
+# izračunam pasove
+delta, dPx = bci.find_band(f, Pxx, 'delta')
+theta, tPx = bci.find_band(f, Pxx, 'theta')
+alpha, aPx = bci.find_band(f, Pxx, 'alpha')
+beta, bPx = bci.find_band(f, Pxx, 'beta')
+gamma, gPx = bci.find_band(f, Pxx, 'gamma')
+
+# izračun frekvenčne ločljivosti za posamezne pasove
+dFres = round(Fs / np.floor(len(delta)), 2)
+tFres = round(Fs / np.floor(len(theta)), 2)
+aFres = round(Fs / np.floor(len(alpha)), 2)
+bFres = round(Fs / np.floor(len(beta)), 2)
+gFres = round(Fs / np.floor(len(gamma)), 2)
+
+deltaP = bci.relativeP(delta, dPx, Pxx, fs)
+thetaP = bci.relativeP(theta, tPx, Pxx, fs)
+alphaP = bci.relativeP(alpha, aPx, Pxx, fs)
+betaP = bci.relativeP(beta, bPx, Pxx, fs)
+gammaP = bci.relativeP(gamma, gPx, Pxx, fs)
+
+tmp = [deltaP, thetaP, alphaP, betaP, gammaP]
+relativePower = []
+for pwr in tmp:
+    relativePower.append(round(pwr, 2))
+
+print(f'\ndelta >> {delta[0]} - {round(delta[-1],2)} Hz, df >> {dFres} Hz') # zelo slaba frekvenčna resolucija, rabiva drugače računat periodogram. Večji vzorec izboljša ločljivost.
+print(f'theta >> {round(theta[0],2)} - {round(theta[-1],2)} Hz, df >> {tFres} Hz')
+print(f'alpha >> {alpha[0]} - {round(alpha[-1],2)} Hz, df >> {aFres} Hz')
+print(f'beta >> {round(beta[0],2)} - {round(beta[-1],2)} Hz, df >> {bFres} Hz')
+print(f'gamma >> {gamma[0]} - {gamma[-1]} Hz, df >> {gFres} Hz')
+print(f'Relative power bands: {relativePower}')
+
+# periodogrami posameznih frekvenčnih pasov
+fig, axes = plt.subplots(nrows=5, ncols=1)
+fig.tight_layout() # Or equivalently,  
+plt.subplot(511); plt.plot(delta, dPx); plt.title('delta')
+plt.subplot(512); plt.plot(theta, tPx); plt.title('theta')
+plt.subplot(513); plt.plot(alpha, aPx); plt.title('alpha')
+plt.subplot(514); plt.plot(beta, bPx); plt.title('beta')
+plt.subplot(515); plt.plot(gamma, gPx); plt.title('gamma')
+
+# relativna moč posameznih frek. pasov
+fig = plt.figure()
+ax = fig.add_axes([0,0,1,1])
+bands = ['delta', 'theta', 'alpha', 'beta', 'gamma']
+ax.bar(bands, relativePower)
+plt.show()

@@ -6,6 +6,7 @@ import csv
 import scipy.fftpack as sfp
 from scipy.fft import fft
 import scipy.signal as signal
+from scipy.integrate import simps
 
 def popcol(my_array,pc):
     """ column popping in numpy arrays
@@ -128,36 +129,81 @@ def find_band(iFreq, iPxx, FrequencyBand='alpha'):
         oFreq: periodogram x-axis for chosen frequency band, only positive frequency
         oPx: periodogram y-axis, only positive frequency
     '''
-    l = len(iFreq) / 2 # vzamem samo pozitivne frekvence
+    l = int(np.floor(len(iFreq) / 2)) # vzamem samo pozitivne frekvence
     freq = iFreq[0:l]
     Px = iPxx[0:l]
+    fmax = freq[-1]
 
     # določim lo in hi - spodnjo in zgornji frekvenčno mejo izbranega pasu
     if FrequencyBand == 'delta':
-        lo = 0.5
-        hi = 4.0
+        lowcut = 0.5
+        highcut = 4.0
     elif FrequencyBand == 'theta':
-        lo = 4.1
-        hi = 8.0
+        lowcut = 4.1
+        highcut = 8.0
     elif FrequencyBand == 'alpha':
-        lo = 8.1
-        hi = 13.0
+        lowcut = 8.1
+        highcut = 13.0
     elif FrequencyBand == 'beta':
-        lo = 13.1
-        hi = 32.0
+        lowcut = 13.1
+        highcut = 32.0
     elif FrequencyBand == 'gamma':
-        lo = 32.1
-        hi = 100.0
+        lowcut = 32.1
+        highcut = fmax
     else:
-        raise ValueError('This frequency band doesn\'t exist. Choose between \'delta\', \'theta\', \'alpha\', \'beta\' or \'gamma\'.')    
+        raise ValueError("This frequency band doesn't exist. Choose between 'delta', 'theta', 'alpha', 'beta' or 'gamma'.")    
 
-    # poiščem dejansko vrednost lo in hi v seznamu frekvenc 'freq'
-    flo = find_nearest(freq, lo) 
-    fhi = find_nearest(freq, hi)
+    # poiščem dejansko vrednost lowcut in highcut v seznamu frekvenc 'freq'
+    #flowcut = find_nearest(freq, lowcut) 
+    #fhighcut = find_nearest(freq, highcut)
 
+    # najdem na katerih indeksih se nahajata frekvenčni meji
+    idx1, = np.where(np.isclose(freq, lowcut))[0] # floating-point search by epsilon
+    idx2, = np.where(np.isclose(freq, highcut))[0]
     
-    
+    # Izrežem frekvenčni pas
+    oFreq = freq[idx1:idx2]
+    oPx = Px[idx1:idx2]
 
     return oFreq, oPx
 
-a, b = find_band()
+def averageP(f, Px, fs):
+    '''
+    Calculate average band power by Simps method.\n
+    In:
+        f...band frequency array
+        Px...periodogram values
+        fs...sampling frequency used with fft and periodogram
+    Out:
+        oP...absolute power of frequency band
+    '''
+    fres = fs / np.floor(len(f)) # izračunam frekvenčno resolucijo periodograma
+    oP = simps(Px, dx=fres) # izračunam površino pod periodogramom po simpsovi formuli
+
+    return oP
+
+def relativeP(band_f, band_Px, full_Pxx, fs):
+    '''
+    Calculate relative band power according to total power.
+    In:
+        band_f...chosen frequency band
+        band_Px...real part of bands periodogram
+        full_Pxx...the whole thing
+        fs...sampling frequency 
+    Out:
+        relP...relative power for band_f (0.0 - 1.0), normalized
+    '''
+    N = np.floor(len(full_Pxx))
+
+    # total power
+    Px = full_Pxx[0:int(N / 2)] # real part of whole periodogram
+    fres = fs / N
+    total_power = simps(Px, dx=fres)
+
+    # band power
+    band_power = averageP(band_f, band_Px, fs)
+
+    # relative power
+    relP = band_power / total_power
+
+    return relP

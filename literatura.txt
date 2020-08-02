@@ -1,0 +1,9 @@
+Nekaj literature glede Impedance merilnih sond: http://wwe.eeginfo.com/research/ElectrodeImpedance.pdf
+
+Aktivne elektrode za zmanjšanje impedance: 
+- https://openbci.com/community/active-electrodes-for-openbci/
+- https://openbci.com/community/active-electrodes-for-openbci-2nd-part/
+- http://openeeg.sourceforge.net/doc/hw/ae.html
+
+Eye movement and blink:
+- https://openbci.com/community/eog-eye-movement-blink-detection-with-the-openbci-cyton/

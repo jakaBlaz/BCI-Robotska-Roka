@@ -52,15 +52,16 @@ w0 = f0/(Fs/2)  # Normalized Frequency
 # Design notch filter
 b, a = signal.iirnotch(w0, Q)
 zi = signal.lfilter_zi(b, a)
+
 #initial bandpass filter
-lowcut = 4
+lowcut = 3
 highcut = 60
 
 #Import data
 podatki,knjiznica = bci.importData("txt")
 podatki = knjiznica["EXG Channel 0"]
 #print(podatki)
-podatki = podatki [8000:16000]
+podatki = podatki [8000:32000]
 
 #Initialize plot diagram
 #plt.xkcd()
@@ -139,6 +140,7 @@ f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 # print(max(f))
 # print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
 #graph power
+
 fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
 pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
 pow_orig.set_title('Whole periodogram')
@@ -149,37 +151,20 @@ pow_gamma.plot(gFreq,gPow)
 pow_gamma.set_title('Gama power')
 pow_gamma.grid()
 
-bFreq,bPow = bci.find_band(f,Pxx, FrequencyBand='gamma')
+bFreq,bPow = bci.find_band(f,Pxx, FrequencyBand='beta')
 pow_beta.plot(bFreq,bPow)
 pow_beta.set_title('Beta power')
 pow_beta.grid()
 
-pow_alpha.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+aFreq,aPow = bci.find_band(f,Pxx, FrequencyBand='alpha')
+pow_alpha.plot(aFreq,aPow)
 pow_alpha.set_title('Alpha power')
 pow_alpha.grid()
 
-pow_theta.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
+tFreq,tPow = bci.find_band(f,Pxx, FrequencyBand='theta')
+pow_theta.plot(tFreq,tPow)
 pow_theta.set_title('Theta power')
 pow_theta.grid()
-'''
-plt.figure(num=3)
-f, t, Sxx = signal.spectrogram(y_fft, fs)
-plt.pcolormesh(t, f, Sxx)
-plt.ylabel('Frequency [Hz]')
-plt.xlabel('Time [sec]')
-plt.show()'''
-'''
-#print("f = ",f)
-#print("Pxx = ",Pxx)
-#plt.xkcd()
-plt.figure(num=2)
-#plt.xlim([0, 50])
-plt.plot(f,Pxx) #močnostni diagram
-plt.xlabel('frequency [Hz]')
-plt.ylabel('PSD [V**2/Hz]')
-plt.grid()
-
-'''
 
 ##################### Testing bci.find_band() #####################
 # izračunam pasove

@@ -10,3 +10,4 @@ pythonCode/PyDrive/mycreds.txt
 pythonCode/OpenBCI_Receive_LSL/test.py
 pythonCode/.DS_Store
 pythonCode/EEG/pylsl/
+pythonCode/EEG/__pycache__/bisijao.cpython-38.pyc

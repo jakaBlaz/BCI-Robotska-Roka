@@ -137,35 +137,6 @@ y_fft = y
 y = sfp.ifft(y) #da iz frekvenčnega prostora prideš nazaj v časovni prostor
 f, Pxx = signal.periodogram(y,fs = fs,return_onesided = False)
 
-# print(max(f))
-# print(f[(int(len(f)/2)+1):int((len(f)/2)+4)])
-#graph power
-
-fig, (pow_orig,pow_gamma,pow_beta,pow_alpha,pow_theta) = plt.subplots(5, 1)
-pow_orig.plot(f[0:int(len(f)/2)],Pxx[0:int(len(f)/2)])
-pow_orig.set_title('Whole periodogram')
-pow_orig.grid()
-
-gFreq,gPow = bci.find_band(f,Pxx, FrequencyBand='gamma')
-pow_gamma.plot(gFreq,gPow)
-pow_gamma.set_title('Gama power')
-pow_gamma.grid()
-
-bFreq,bPow = bci.find_band(f,Pxx, FrequencyBand='beta')
-pow_beta.plot(bFreq,bPow)
-pow_beta.set_title('Beta power')
-pow_beta.grid()
-
-aFreq,aPow = bci.find_band(f,Pxx, FrequencyBand='alpha')
-pow_alpha.plot(aFreq,aPow)
-pow_alpha.set_title('Alpha power')
-pow_alpha.grid()
-
-tFreq,tPow = bci.find_band(f,Pxx, FrequencyBand='theta')
-pow_theta.plot(tFreq,tPow)
-pow_theta.set_title('Theta power')
-pow_theta.grid()
-
 ##################### Testing bci.find_band() #####################
 # izračunam pasove
 delta, dPx = bci.find_band(f, Pxx, 'delta')
@@ -196,12 +167,13 @@ print(f'\ndelta >> {delta[0]} - {round(delta[-1],2)} Hz, df >> {dFres} Hz') # ze
 print(f'theta >> {round(theta[0],2)} - {round(theta[-1],2)} Hz, df >> {tFres} Hz')
 print(f'alpha >> {alpha[0]} - {round(alpha[-1],2)} Hz, df >> {aFres} Hz')
 print(f'beta >> {round(beta[0],2)} - {round(beta[-1],2)} Hz, df >> {bFres} Hz')
-print(f'gamma >> {gamma[0]} - {gamma[-1]} Hz, df >> {gFres} Hz')
+print(f'gamma >> {gamma[0]} - {gamma[-1],2} Hz, df >> {gFres} Hz')
 print(f'Relative power bands: {relativePower}')
 
 # periodogrami posameznih frekvenčnih pasov
 fig, axes = plt.subplots(nrows=5, ncols=1)
 fig.tight_layout() # Or equivalently,  
+
 plt.subplot(511); plt.plot(delta, dPx); plt.title('delta')
 plt.subplot(512); plt.plot(theta, tPx); plt.title('theta')
 plt.subplot(513); plt.plot(alpha, aPx); plt.title('alpha')
